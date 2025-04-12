@@ -1,4 +1,4 @@
-## Daily Expense Tracker App 💰
+## Expense Tracker App 💰
 
 Manage your expenses effortlessly with this intuitive app.📱Track daily spending, set budgets, and stay on top of your finances with ease. 💳💡
 
@@ -6,8 +6,7 @@ Manage your expenses effortlessly with this intuitive app.📱Track daily spendi
 
 
 ## 📱 Screenshots
-![App Mockups 45](https://github.com/haithemnini/daily_expense_tracker_app/assets/88515475/0e422cd7-cf38-48c5-bc8b-bf89fba69818)
-
+- None
 ## 📌 Features
 - Expense Tracking: 📊 Easily monitor daily spending habits.
 - Expense Analytics: 📊 Dive deep into expense analytics for detailed insights.
