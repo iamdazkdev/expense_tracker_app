@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "942263604820",
+    "firebase_url": "https://daily-expense-tracker-v1-default-rtdb.firebaseio.com",
+    "project_id": "daily-expense-tracker-v1",
+    "storage_bucket": "daily-expense-tracker-v1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:942263604820:android:70aafd237698eb7ea6ffc1",
+        "android_client_info": {
+          "package_name": "com.example.daily_expense_tracker_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "942263604820-05vuo534iaonpehie5q0k0rag4j6td0h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.daily_expense_tracker_app",
+            "certificate_hash": "8c3d940b544fa9d29f5d17e6dbeb0cd6f6bde29e"
+          }
+        },
+        {
+          "client_id": "942263604820-5mcu1tefn05r12vlm4m638qfgoi0nudv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBL-9IDFSRCB50fr4sWRL_tns7-kFKPvnc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "942263604820-5mcu1tefn05r12vlm4m638qfgoi0nudv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "942263604820-7kg310l6j50ubacud66gtej4cuvkcaj1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.dailyExpenseTrackerApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

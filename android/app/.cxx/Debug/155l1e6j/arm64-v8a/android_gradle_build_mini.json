@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/haluuvananh/development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/haluuvananh/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Volumes/DATA/JobFreelance/DailyExpenseTrackerApp/daily_expense_tracker_app/android/app/.cxx/Debug/155l1e6j/arm64-v8a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/haluuvananh/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Volumes/DATA/JobFreelance/DailyExpenseTrackerApp/daily_expense_tracker_app/android/app/.cxx/Debug/155l1e6j/arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

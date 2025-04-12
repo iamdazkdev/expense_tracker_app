@@ -1,0 +1,1 @@
+/Volumes/DATA/JobFreelance/DailyExpenseTrackerApp/daily_expense_tracker_app/build/app/intermediates/cxx/RelWithDebInfo/2y4t53m3/obj/x86_64

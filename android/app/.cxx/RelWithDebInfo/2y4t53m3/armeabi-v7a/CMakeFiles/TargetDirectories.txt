@@ -1,0 +1,2 @@
+/Volumes/DATA/JobFreelance/DailyExpenseTrackerApp/daily_expense_tracker_app/android/app/.cxx/RelWithDebInfo/2y4t53m3/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Volumes/DATA/JobFreelance/DailyExpenseTrackerApp/daily_expense_tracker_app/android/app/.cxx/RelWithDebInfo/2y4t53m3/armeabi-v7a/CMakeFiles/rebuild_cache.dir
