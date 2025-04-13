@@ -22,7 +22,6 @@ class TransactionCubit extends Cubit<TransactionState> {
 
   bool _isEditing = false;
   set isEditing(bool value) => _isEditing = value;
-
   final TextEditingController _amountController = TextEditingController();
   TextEditingController get amountController => _amountController;
 
@@ -32,16 +31,21 @@ class TransactionCubit extends Cubit<TransactionState> {
     } else {
       _amountController.clear();
       _transaction = Transaction.empty();
+      _transaction = _transaction.copyWith(
+          categorysIndex: Categorys.values[0].index,
+          categoryName: Categorys.values[0].name);
     }
+
     emit(_buildState());
   }
 
   void onCategorysChanged(Categorys categorys) {
     _transaction = _transaction.copyWith(categorysIndex: categorys.index);
+    _transaction = _transaction.copyWith(categoryName: categorys.name);
     emit(_buildState());
   }
 
-  void onTransactionCategoryChanged(Category category) {
+  void onTransactionCategoryChanged(TransactionType category) {
     _transaction = _transaction.copyWith(category: category);
     emit(_buildState());
   }
@@ -54,22 +58,27 @@ class TransactionCubit extends Cubit<TransactionState> {
   void addOrUpdateTransaction() {
     debugPrint(_transaction.toString());
 
-    emit(const TransactionState.loading());
-
     final amount = _amountController.text.isNotEmpty
         ? _amountController.text.toUnFormattedString().toDouble()
-        : null;
+        : 0.0;
 
-    final transactionUpdated = _transaction.copyWith(amount: amount ?? 0.0);
+    if (amount == 0.0 || amount == 0 || amount == 0.00) {
+      emit(TransactionState.error('Số tiền không hợp lệ'));
+      return;
+    }
+
+    emit(const TransactionState.loading());
+
+    final transactionUpdated = _transaction.copyWith(amount: amount);
 
     Future.delayed(const Duration(milliseconds: 300)).then((_) {
       try {
         if (_isEditing) {
           _transactionRepository.updateTransaction(transactionUpdated);
-          emit(const TransactionState.success('Transaction updated success'));
+          emit(const TransactionState.success('Cập nhật giao dịch thành công'));
         } else {
           _transactionRepository.addTransaction(transactionUpdated);
-          emit(const TransactionState.success('Transaction added success'));
+          emit(const TransactionState.success('Thêm giao dịch thành công'));
         }
       } catch (error) {
         debugPrint('error: $error');

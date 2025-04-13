@@ -28,7 +28,7 @@ class StateRepository implements StateBaseRepository {
 
   @override
   Future<AppResult<Map<String, dynamic>>> getState({
-    required Category category,
+    required TransactionType category,
     required DateTime startDate,
     required DateTime endDate,
   }) async {
@@ -99,7 +99,7 @@ class StateRepository implements StateBaseRepository {
   }
 
   Future<List<Transaction>> _getHiveTransactions(
-      Category category, DateTime startDate, DateTime endDate) async {
+      TransactionType category, DateTime startDate, DateTime endDate) async {
     final transactions = await _dbHiveClient.getAll<TransactionHive>(
       boxName: 'transactions',
     );
@@ -124,7 +124,7 @@ class StateRepository implements StateBaseRepository {
   }
 
   Future<List<Transaction>> _getFirestoreTransactions(
-      Category category, DateTime startDate, DateTime endDate) async {
+      TransactionType category, DateTime startDate, DateTime endDate) async {
     final transactions = await _dbFirestoreClient.getQueryOrderBy<Transaction>(
       collectionPath: 'transactions',
       field: 'userId',

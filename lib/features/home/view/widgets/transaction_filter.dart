@@ -12,7 +12,7 @@ import 'widgets.dart';
 class TransactionFilter extends StatefulWidget {
   const TransactionFilter({super.key, required this.category});
 
-  final Category category;
+  final TransactionType category;
 
   @override
   State<TransactionFilter> createState() => _TransactionFilterState();
@@ -72,7 +72,7 @@ class _TransactionFilterState extends State<TransactionFilter> {
                   '0.00',
               style: AppTextStyle.caption.copyWith(
                 fontWeight: FontWeight.w600,
-                color: widget.category == Category.expense
+                color: widget.category == TransactionType.expense
                     ? Colors.redAccent
                     : Colors.greenAccent,
               ),

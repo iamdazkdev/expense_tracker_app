@@ -34,10 +34,10 @@ class StateView extends StatelessWidget {
                 ],
                 children: [
                   TransactionFilter(
-                    category: Category.income,
+                    category: TransactionType.income,
                   ),
                   TransactionFilter(
-                    category: Category.expense,
+                    category: TransactionType.expense,
                   ),
                 ],
               ),

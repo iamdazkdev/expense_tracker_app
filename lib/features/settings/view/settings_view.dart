@@ -1,3 +1,4 @@
+import 'package:daily_expense_tracker_app/core/router/app_route.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -30,6 +31,20 @@ class SettingsView extends StatelessWidget {
             const SizedBox(height: 10),
             const DarkModeSwitch(),
             const SizedBox(height: 10),
+            ItemSettings(
+              title: 'Danh mục chi tiêu',
+              iconData: FontAwesomeIcons.tags,
+              backgroundIcon: Colors.blueAccent,
+              trailing: const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
+              onTap: () => Navigator.pushNamed(context, RoutesName.categories),
+            ),
+            ItemSettings(
+              title: 'Quản lý thẻ',
+              iconData: FontAwesomeIcons.creditCard,
+              backgroundIcon: Colors.blueAccent,
+              trailing: const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
+              onTap: () => Navigator.pushNamed(context, RoutesName.categories),
+            ),
             ItemSettings(
               title: 'Phiên bản',
               iconData: FontAwesomeIcons.circleInfo,

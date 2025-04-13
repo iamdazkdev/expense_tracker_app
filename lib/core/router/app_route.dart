@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:user_service/user_service.dart';
 
+import '../../features/categories/view/category_view.dart';
 import '../../features/home/view/all_view_transaction.dart';
 import '../../features/home/view/home_view.dart';
 import '../../features/profile/view/profile_view.dart';
@@ -17,12 +18,12 @@ class RoutesName {
   static const String transaction = '/transaction';
   static const String allViewTransaction = '/allViewTransaction';
   static const String loginWithAccount = '/loginWithAccount';
+  static const String categories = '/categories';
 }
 
 @immutable
 class AppRouter {
   PageRoute generateRoute(RouteSettings settings) {
-    // ignore: unused_local_variable
     final arguments = settings.arguments;
 
     switch (settings.name) {
@@ -55,12 +56,11 @@ class AppRouter {
           routeName: settings.name,
           viewToShow: const AllViewTransaction(),
         );
-
-      /* case RoutesName.loginWithAccount:
+      case RoutesName.categories:
         return _getPageRoute(
           routeName: settings.name,
-          viewToShow: const LoginWithAccount(),
-        );*/
+          viewToShow: const CategoryView(),
+        );
       default:
         return _getPageRoute(
           routeName: settings.name,

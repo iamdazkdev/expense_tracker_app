@@ -6,7 +6,7 @@ enum TransactionAction {
   edit,
 }
 
-enum Category {
+enum TransactionType {
   expense(
     name: 'Chi tiêu',
     backgroundIcon: Colors.redAccent,
@@ -22,7 +22,7 @@ enum Category {
   final IconData icon;
   final Color backgroundIcon;
 
-  const Category({
+  const TransactionType({
     required this.name,
     required this.icon,
     required this.backgroundIcon,

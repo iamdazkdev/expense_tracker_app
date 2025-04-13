@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../enum/categorys.dart';
@@ -11,7 +12,7 @@ class CategoryModel with _$CategoryModel {
     required String id, // id Firestore document
     required String name, // Tên hiển thị
     required String iconName, // FontFamilyName
-    required int backgroundColorIcon, // Mã màu dạng int
+    required int colorName, // Mã màu dạng int (ARGB)
     String? note,
   }) = _CategoryModel;
 
@@ -22,8 +23,8 @@ class CategoryModel with _$CategoryModel {
     return const CategoryModel(
       id: '',
       name: '',
-      iconName: '',
-      backgroundColorIcon: 0xFFFF0000,
+      iconName: 'bus', // Font fallback nếu null
+      colorName: 0xFFFF0000, // Default color red
       note: null,
     );
   }
@@ -36,14 +37,31 @@ class CategoryModel with _$CategoryModel {
     return CategoryModel(
       id: id,
       name: categorys.name,
-      iconName:
-          categorys.icon.fontFamily ?? 'FontAwesomeSolid', // fallback nếu null
-      backgroundColorIcon: categorys.backgroundColorIcon.value,
+      iconName: categorys.icon.codePoint.toString(),
+      colorName:
+          categorys.backgroundColorIcon.toARGB32(), // Store color as ARGB
       note: categorys.note,
+    );
+  }
+
+  /// Tạo Categorys từ CategoryModel (để chuyển từ mô hình dữ liệu Firestore về enum)
+  Categorys toCategorys() {
+    return Categorys.values.firstWhere(
+      (category) => category.name == name,
+      orElse: () => Categorys.others, // Return default if not found
     );
   }
 }
 
 extension CategoryModelX on CategoryModel {
-  /// Lấy enum Categorys từ categoryIndex
+  /// Lấy mã màu từ ARGB thành Color
+  Color get color => Color(colorName); // Chuyển ARGB (int) thành Color
+
+  /// Lấy icon từ FontFamilyName
+  IconData get icon {
+    return IconData(
+      int.parse(iconName), // Chuyển iconName (String) thành int (codePoint)
+      fontFamily: 'FontAwesomeSolid', // FontFamily của FontAwesome
+    );
+  }
 }

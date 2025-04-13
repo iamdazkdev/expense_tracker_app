@@ -22,14 +22,17 @@ class TransactionHive extends HiveObject {
   @HiveField(5)
   CategoryHive category;
 
-  TransactionHive({
-    required this.uuid,
-    required this.userId,
-    required this.date,
-    required this.amount,
-    required this.categorysIndex,
-    required this.category,
-  });
+  @HiveField(6)
+  String categoryName;
+
+  TransactionHive(
+      {required this.uuid,
+      required this.userId,
+      required this.date,
+      required this.amount,
+      required this.categorysIndex,
+      required this.category,
+      required this.categoryName});
 }
 
 @HiveType(typeId: 1)

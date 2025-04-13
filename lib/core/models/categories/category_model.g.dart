@@ -8,10 +8,10 @@ part of 'category_model.dart';
 
 _$CategoryModelImpl _$$CategoryModelImplFromJson(Map<String, dynamic> json) =>
     _$CategoryModelImpl(
-      id: json['id'] as String,
+      id: json['id'] as String?,
       name: json['name'] as String,
       iconName: json['iconName'] as String,
-      backgroundColorIcon: (json['backgroundColorIcon'] as num).toInt(),
+      colorName: (json['colorName'] as num).toInt(),
       note: json['note'] as String?,
     );
 
@@ -20,6 +20,6 @@ Map<String, dynamic> _$$CategoryModelImplToJson(_$CategoryModelImpl instance) =>
       'id': instance.id,
       'name': instance.name,
       'iconName': instance.iconName,
-      'backgroundColorIcon': instance.backgroundColorIcon,
+      'colorName': instance.colorName,
       'note': instance.note,
     };

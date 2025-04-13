@@ -20,14 +20,16 @@ CardModel _$CardModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CardModel {
-  String get id => throw _privateConstructorUsedError;
-  String get cardName => throw _privateConstructorUsedError;
+  int? get id => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
   String get holderName => throw _privateConstructorUsedError;
-  String get accountNumber => throw _privateConstructorUsedError;
-  String get cardType => throw _privateConstructorUsedError;
-  int get backgroundColor => throw _privateConstructorUsedError;
-  double get balance => throw _privateConstructorUsedError;
-  DateTime get createdAt => throw _privateConstructorUsedError;
+  String get accountNumber =>
+      throw _privateConstructorUsedError; //required IconData icon,
+  int get color => throw _privateConstructorUsedError;
+  bool? get isDefault => throw _privateConstructorUsedError;
+  double? get balance => throw _privateConstructorUsedError;
+  double? get income => throw _privateConstructorUsedError;
+  double? get expense => throw _privateConstructorUsedError;
 
   /// Serializes this CardModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -45,14 +47,15 @@ abstract class $CardModelCopyWith<$Res> {
       _$CardModelCopyWithImpl<$Res, CardModel>;
   @useResult
   $Res call(
-      {String id,
-      String cardName,
+      {int? id,
+      String name,
       String holderName,
       String accountNumber,
-      String cardType,
-      int backgroundColor,
-      double balance,
-      DateTime createdAt});
+      int color,
+      bool? isDefault,
+      double? balance,
+      double? income,
+      double? expense});
 }
 
 /// @nodoc
@@ -70,23 +73,24 @@ class _$CardModelCopyWithImpl<$Res, $Val extends CardModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? cardName = null,
+    Object? id = freezed,
+    Object? name = null,
     Object? holderName = null,
     Object? accountNumber = null,
-    Object? cardType = null,
-    Object? backgroundColor = null,
-    Object? balance = null,
-    Object? createdAt = null,
+    Object? color = null,
+    Object? isDefault = freezed,
+    Object? balance = freezed,
+    Object? income = freezed,
+    Object? expense = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      cardName: null == cardName
-          ? _value.cardName
-          : cardName // ignore: cast_nullable_to_non_nullable
+              as int?,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
               as String,
       holderName: null == holderName
           ? _value.holderName
@@ -96,22 +100,26 @@ class _$CardModelCopyWithImpl<$Res, $Val extends CardModel>
           ? _value.accountNumber
           : accountNumber // ignore: cast_nullable_to_non_nullable
               as String,
-      cardType: null == cardType
-          ? _value.cardType
-          : cardType // ignore: cast_nullable_to_non_nullable
-              as String,
-      backgroundColor: null == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
+      color: null == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
               as int,
-      balance: null == balance
+      isDefault: freezed == isDefault
+          ? _value.isDefault
+          : isDefault // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      balance: freezed == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
-              as double,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as double?,
+      income: freezed == income
+          ? _value.income
+          : income // ignore: cast_nullable_to_non_nullable
+              as double?,
+      expense: freezed == expense
+          ? _value.expense
+          : expense // ignore: cast_nullable_to_non_nullable
+              as double?,
     ) as $Val);
   }
 }
@@ -125,14 +133,15 @@ abstract class _$$CardModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
-      String cardName,
+      {int? id,
+      String name,
       String holderName,
       String accountNumber,
-      String cardType,
-      int backgroundColor,
-      double balance,
-      DateTime createdAt});
+      int color,
+      bool? isDefault,
+      double? balance,
+      double? income,
+      double? expense});
 }
 
 /// @nodoc
@@ -148,23 +157,24 @@ class __$$CardModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? cardName = null,
+    Object? id = freezed,
+    Object? name = null,
     Object? holderName = null,
     Object? accountNumber = null,
-    Object? cardType = null,
-    Object? backgroundColor = null,
-    Object? balance = null,
-    Object? createdAt = null,
+    Object? color = null,
+    Object? isDefault = freezed,
+    Object? balance = freezed,
+    Object? income = freezed,
+    Object? expense = freezed,
   }) {
     return _then(_$CardModelImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      cardName: null == cardName
-          ? _value.cardName
-          : cardName // ignore: cast_nullable_to_non_nullable
+              as int?,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
               as String,
       holderName: null == holderName
           ? _value.holderName
@@ -174,22 +184,26 @@ class __$$CardModelImplCopyWithImpl<$Res>
           ? _value.accountNumber
           : accountNumber // ignore: cast_nullable_to_non_nullable
               as String,
-      cardType: null == cardType
-          ? _value.cardType
-          : cardType // ignore: cast_nullable_to_non_nullable
-              as String,
-      backgroundColor: null == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
+      color: null == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
               as int,
-      balance: null == balance
+      isDefault: freezed == isDefault
+          ? _value.isDefault
+          : isDefault // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      balance: freezed == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
-              as double,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as double?,
+      income: freezed == income
+          ? _value.income
+          : income // ignore: cast_nullable_to_non_nullable
+              as double?,
+      expense: freezed == expense
+          ? _value.expense
+          : expense // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }
@@ -198,39 +212,42 @@ class __$$CardModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CardModelImpl implements _CardModel {
   const _$CardModelImpl(
-      {required this.id,
-      required this.cardName,
+      {this.id,
+      required this.name,
       required this.holderName,
       required this.accountNumber,
-      required this.cardType,
-      required this.backgroundColor,
-      this.balance = 0.0,
-      required this.createdAt});
+      required this.color,
+      this.isDefault,
+      this.balance,
+      this.income,
+      this.expense});
 
   factory _$CardModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$CardModelImplFromJson(json);
 
   @override
-  final String id;
+  final int? id;
   @override
-  final String cardName;
+  final String name;
   @override
   final String holderName;
   @override
   final String accountNumber;
+//required IconData icon,
   @override
-  final String cardType;
+  final int color;
   @override
-  final int backgroundColor;
+  final bool? isDefault;
   @override
-  @JsonKey()
-  final double balance;
+  final double? balance;
   @override
-  final DateTime createdAt;
+  final double? income;
+  @override
+  final double? expense;
 
   @override
   String toString() {
-    return 'CardModel(id: $id, cardName: $cardName, holderName: $holderName, accountNumber: $accountNumber, cardType: $cardType, backgroundColor: $backgroundColor, balance: $balance, createdAt: $createdAt)';
+    return 'CardModel(id: $id, name: $name, holderName: $holderName, accountNumber: $accountNumber, color: $color, isDefault: $isDefault, balance: $balance, income: $income, expense: $expense)';
   }
 
   @override
@@ -239,25 +256,23 @@ class _$CardModelImpl implements _CardModel {
         (other.runtimeType == runtimeType &&
             other is _$CardModelImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.cardName, cardName) ||
-                other.cardName == cardName) &&
+            (identical(other.name, name) || other.name == name) &&
             (identical(other.holderName, holderName) ||
                 other.holderName == holderName) &&
             (identical(other.accountNumber, accountNumber) ||
                 other.accountNumber == accountNumber) &&
-            (identical(other.cardType, cardType) ||
-                other.cardType == cardType) &&
-            (identical(other.backgroundColor, backgroundColor) ||
-                other.backgroundColor == backgroundColor) &&
+            (identical(other.color, color) || other.color == color) &&
+            (identical(other.isDefault, isDefault) ||
+                other.isDefault == isDefault) &&
             (identical(other.balance, balance) || other.balance == balance) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+            (identical(other.income, income) || other.income == income) &&
+            (identical(other.expense, expense) || other.expense == expense));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, cardName, holderName,
-      accountNumber, cardType, backgroundColor, balance, createdAt);
+  int get hashCode => Object.hash(runtimeType, id, name, holderName,
+      accountNumber, color, isDefault, balance, income, expense);
 
   /// Create a copy of CardModel
   /// with the given fields replaced by the non-null parameter values.
@@ -277,34 +292,37 @@ class _$CardModelImpl implements _CardModel {
 
 abstract class _CardModel implements CardModel {
   const factory _CardModel(
-      {required final String id,
-      required final String cardName,
+      {final int? id,
+      required final String name,
       required final String holderName,
       required final String accountNumber,
-      required final String cardType,
-      required final int backgroundColor,
-      final double balance,
-      required final DateTime createdAt}) = _$CardModelImpl;
+      required final int color,
+      final bool? isDefault,
+      final double? balance,
+      final double? income,
+      final double? expense}) = _$CardModelImpl;
 
   factory _CardModel.fromJson(Map<String, dynamic> json) =
       _$CardModelImpl.fromJson;
 
   @override
-  String get id;
+  int? get id;
   @override
-  String get cardName;
+  String get name;
   @override
   String get holderName;
   @override
-  String get accountNumber;
+  String get accountNumber; //required IconData icon,
   @override
-  String get cardType;
+  int get color;
   @override
-  int get backgroundColor;
+  bool? get isDefault;
   @override
-  double get balance;
+  double? get balance;
   @override
-  DateTime get createdAt;
+  double? get income;
+  @override
+  double? get expense;
 
   /// Create a copy of CardModel
   /// with the given fields replaced by the non-null parameter values.

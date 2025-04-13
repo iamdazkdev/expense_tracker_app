@@ -17,7 +17,7 @@ class StateCubit extends Cubit<StateState> {
         super(const StateState.initial()) {
     _startDate = DateTime.now();
     _endDate = DateTime.now().subtract(const Duration(days: 7));
-    _transactionCategory = Category.income;
+    _transactionCategory = TransactionType.income;
   }
 
   late DateTime _startDate;
@@ -26,12 +26,12 @@ class StateCubit extends Cubit<StateState> {
   late DateTime newStartDate = _startDate;
   late DateTime newEndDate = _endDate;
 
-  late Category _transactionCategory;
+  late TransactionType _transactionCategory;
 
   DateTime get startDate => _startDate;
   DateTime get endDate => _endDate;
 
-  Category get transactionCategory => _transactionCategory;
+  TransactionType get transactionCategory => _transactionCategory;
 
   void applyFilter() {
     // Check if the new start date and end date is different
@@ -47,7 +47,7 @@ class StateCubit extends Cubit<StateState> {
     }
   }
 
-  Future<void> getStat(Category category) async {
+  Future<void> getStat(TransactionType category) async {
     emit(const StateState.loading());
 
     // Set the transaction category

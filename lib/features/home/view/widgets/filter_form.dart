@@ -36,7 +36,7 @@ class _FilterFormState extends State<FilterForm> {
 
     return Column(
       children: [
-        _buidlHeaderText('Start Date'),
+        _buidlHeaderText('Ngày bắt đầu'),
         const SizedBox(height: 10),
         CustomItemButton(
           text: startDate.formattedDateOnly,
@@ -51,7 +51,7 @@ class _FilterFormState extends State<FilterForm> {
           onPressed: () => _showPickeDate(context, startDate, true),
         ),
         const SizedBox(height: 15),
-        _buidlHeaderText('End Date'),
+        _buidlHeaderText('Ngày kết thúc'),
         const SizedBox(height: 10),
         CustomItemButton(
           text: endDate.formattedDateOnly,

@@ -11,9 +11,10 @@ _$TransactionImpl _$$TransactionImplFromJson(Map<String, dynamic> json) =>
       uuid: json['uuid'] as String?,
       userId: json['userId'] as String?,
       amount: (json['amount'] as num).toDouble(),
+      categoryName: json['categoryName'] as String,
       date: const TimestampConverter().fromJson(json['date'] as Timestamp),
       categorysIndex: (json['categorysIndex'] as num).toInt(),
-      category: $enumDecode(_$CategoryEnumMap, json['category']),
+      category: $enumDecode(_$TransactionTypeEnumMap, json['category']),
     );
 
 Map<String, dynamic> _$$TransactionImplToJson(_$TransactionImpl instance) =>
@@ -21,12 +22,13 @@ Map<String, dynamic> _$$TransactionImplToJson(_$TransactionImpl instance) =>
       'uuid': instance.uuid,
       'userId': instance.userId,
       'amount': instance.amount,
+      'categoryName': instance.categoryName,
       'date': const TimestampConverter().toJson(instance.date),
       'categorysIndex': instance.categorysIndex,
-      'category': _$CategoryEnumMap[instance.category]!,
+      'category': _$TransactionTypeEnumMap[instance.category]!,
     };
 
-const _$CategoryEnumMap = {
-  Category.expense: 'expense',
-  Category.income: 'income',
+const _$TransactionTypeEnumMap = {
+  TransactionType.expense: 'expense',
+  TransactionType.income: 'income',
 };

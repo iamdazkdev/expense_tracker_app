@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../enum/enum.dart';
@@ -14,9 +13,10 @@ class Transaction with _$Transaction {
     required String? uuid,
     required String? userId,
     required double amount,
+    required String categoryName,
     @TimestampConverter() required DateTime date,
     required int categorysIndex,
-    required Category category,
+    required TransactionType category,
   }) = _Transaction;
 
   factory Transaction.fromJson(Map<String, dynamic> json) =>
@@ -29,12 +29,12 @@ class Transaction with _$Transaction {
       amount: 0.0,
       date: DateTime.now(),
       categorysIndex: 0,
-      category: Category.expense,
+      category: TransactionType.expense,
+      categoryName: '',
     );
   }
 
   factory Transaction.fromHiveModel(TransactionHive transactionHive) {
-    debugPrint("Hello from fromHiveModel");
     return Transaction(
       uuid: transactionHive.uuid,
       userId: transactionHive.userId,
@@ -42,8 +42,9 @@ class Transaction with _$Transaction {
       date: transactionHive.date,
       categorysIndex: transactionHive.categorysIndex,
       category: transactionHive.category == CategoryHive.expense
-          ? Category.expense
-          : Category.income,
+          ? TransactionType.expense
+          : TransactionType.income,
+      categoryName: transactionHive.categoryName,
     );
   }
 }
@@ -66,7 +67,7 @@ extension TransactionTotalsExtension on List<Transaction> {
       amount: fold(
         0,
         (previousValue, element) {
-          if (element.category == Category.expense) {
+          if (element.category == TransactionType.expense) {
             return previousValue - element.amount;
           } else {
             return previousValue + element.amount;
@@ -75,7 +76,8 @@ extension TransactionTotalsExtension on List<Transaction> {
       ),
       date: DateTime.now(),
       categorysIndex: 0,
-      category: Category.expense,
+      category: TransactionType.expense,
+      categoryName: '',
     );
   }
 }
@@ -88,9 +90,10 @@ extension TransactionExtension on Transaction {
       amount: amount,
       date: date,
       categorysIndex: categorysIndex,
-      category: category == Category.expense
+      category: category == TransactionType.expense
           ? CategoryHive.expense
           : CategoryHive.income,
+      categoryName: categoryName,
     );
   }
 }

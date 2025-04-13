@@ -112,7 +112,6 @@ class _TransactionFormState extends State<TransactionForm> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(width: 18),
-          // const Text('\$', style: AppTextStyle.title2),
           Flexible(
             child: CustomTextFormField(
               fontSize: 30,
@@ -128,6 +127,13 @@ class _TransactionFormState extends State<TransactionForm> {
               controller: context.read<TransactionCubit>().amountController,
               prefixText: NumberFormat.compactSimpleCurrency(locale: 'en')
                   .currencySymbol,
+              /*  validator: (value) {
+                final amount = value?.toUnformattedString().toDouble() ?? 0.0;
+                if (amount <= 0) {
+                  return 'Số tiền không hợp lệ';
+                }
+                return null;
+              },*/
             ),
           )
         ],
@@ -174,7 +180,7 @@ class _TransactionFormState extends State<TransactionForm> {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 25.0),
         child: Column(
-          children: Category.values.map((transactionCategory) {
+          children: TransactionType.values.map((transactionCategory) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: CustomItemButton(

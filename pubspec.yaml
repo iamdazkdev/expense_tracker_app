@@ -60,6 +60,8 @@ dependencies:
 
   # Others
   pattern_formatter: ^4.0.0
+  material_symbols_icons: ^4.2815.0
+  font_awesome_metadata: ^1.0.1
 
 dev_dependencies:
   # Linting

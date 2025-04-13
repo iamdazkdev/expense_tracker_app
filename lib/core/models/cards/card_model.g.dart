@@ -8,24 +8,26 @@ part of 'card_model.dart';
 
 _$CardModelImpl _$$CardModelImplFromJson(Map<String, dynamic> json) =>
     _$CardModelImpl(
-      id: json['id'] as String,
-      cardName: json['cardName'] as String,
+      id: (json['id'] as num?)?.toInt(),
+      name: json['name'] as String,
       holderName: json['holderName'] as String,
       accountNumber: json['accountNumber'] as String,
-      cardType: json['cardType'] as String,
-      backgroundColor: (json['backgroundColor'] as num).toInt(),
-      balance: (json['balance'] as num?)?.toDouble() ?? 0.0,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      color: (json['color'] as num).toInt(),
+      isDefault: json['isDefault'] as bool?,
+      balance: (json['balance'] as num?)?.toDouble(),
+      income: (json['income'] as num?)?.toDouble(),
+      expense: (json['expense'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$$CardModelImplToJson(_$CardModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'cardName': instance.cardName,
+      'name': instance.name,
       'holderName': instance.holderName,
       'accountNumber': instance.accountNumber,
-      'cardType': instance.cardType,
-      'backgroundColor': instance.backgroundColor,
+      'color': instance.color,
+      'isDefault': instance.isDefault,
       'balance': instance.balance,
-      'createdAt': instance.createdAt.toIso8601String(),
+      'income': instance.income,
+      'expense': instance.expense,
     };

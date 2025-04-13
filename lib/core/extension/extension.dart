@@ -29,24 +29,24 @@ extension DevicesOsContextExtension on BuildContext {
   double get deviceWidth => deviceSize.width;
 }
 
-extension CategoryExtension on Category {
-  Category get categoryHive {
+extension CategoryExtension on TransactionType {
+  TransactionType get categoryHive {
     switch (this) {
-      case Category.income:
-        return Category.income;
-      case Category.expense:
-        return Category.expense;
+      case TransactionType.income:
+        return TransactionType.income;
+      case TransactionType.expense:
+        return TransactionType.expense;
     }
   }
 }
 
 extension TransactionTypeHiveExtension on CategoryHive {
-  Category get category {
+  TransactionType get category {
     switch (this) {
       case CategoryHive.income:
-        return Category.income;
+        return TransactionType.income;
       case CategoryHive.expense:
-        return Category.expense;
+        return TransactionType.expense;
     }
   }
 }
@@ -144,5 +144,16 @@ class PhoneNumberFormatter extends TextInputFormatter {
       text: formatted,
       selection: TextSelection.collapsed(offset: formatted.length),
     );
+  }
+}
+
+extension StringFormattingWithCurrency on String {
+  String toUnformattedString() {
+    // Removes any non-numeric characters, such as commas or spaces
+    return replaceAll(RegExp(r'[^0-9]'), '');
+  }
+
+  double toDouble() {
+    return double.tryParse(this) ?? 0.0;
   }
 }

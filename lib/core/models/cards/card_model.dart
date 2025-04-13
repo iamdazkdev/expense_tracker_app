@@ -7,33 +7,35 @@ part 'card_model.g.dart';
 @freezed
 class CardModel with _$CardModel {
   const factory CardModel({
-    required String id,
-    required String cardName,
+    int? id,
+    required String name,
     required String holderName,
     required String accountNumber,
-    required String cardType,
-    required int backgroundColor,
-    @Default(0.0) double balance,
-    required DateTime createdAt,
+    //required IconData icon,
+    required int color,
+    bool? isDefault,
+    double? balance,
+    double? income,
+    double? expense,
   }) = _CardModel;
 
+  // Phương thức để chuyển từ JSON thành đối tượng CardModel
   factory CardModel.fromJson(Map<String, dynamic> json) =>
       _$CardModelFromJson(json);
 
-  factory CardModel.empty() {
+  // Phương thức empty trả về đối tượng CardModel mặc định
+  static CardModel empty() {
     return CardModel(
-      id: '',
-      cardName: '',
+      id: null,
+      name: '',
       holderName: '',
       accountNumber: '',
-      cardType: '',
-      backgroundColor: Colors.blue.value,
+      // icon: Icons.credit_card,
+      color: Colors.grey.toARGB32(),
+      isDefault: false,
       balance: 0.0,
-      createdAt: DateTime.now(),
+      income: 0.0,
+      expense: 0.0,
     );
   }
-}
-
-extension CardModelX on CardModel {
-  Color get background => Color(backgroundColor);
 }

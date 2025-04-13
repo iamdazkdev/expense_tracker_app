@@ -47,8 +47,8 @@ abstract class DbFirestoreClientBase {
   Future<List<T>> getQuery<T>({
     required String collectionPath,
     required ObjectMapper<T> mapper,
-    required String field,
-    required dynamic isEqualTo,
+    String? field,
+    dynamic isEqualTo,
   });
 
   Stream<List<T>> streamQuery<T>({
@@ -68,8 +68,8 @@ abstract class DbFirestoreClientBase {
   Future<List<T>> getQueryOrderBy<T>({
     required String collectionPath,
     required ObjectMapper<T> mapper,
-    required String field,
-    required dynamic isEqualTo,
+    String? field,
+    dynamic isEqualTo,
     required String orderByField,
     bool descending = false,
     int? limit,

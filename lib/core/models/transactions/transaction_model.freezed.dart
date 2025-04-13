@@ -23,10 +23,11 @@ mixin _$Transaction {
   String? get uuid => throw _privateConstructorUsedError;
   String? get userId => throw _privateConstructorUsedError;
   double get amount => throw _privateConstructorUsedError;
+  String get categoryName => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime get date => throw _privateConstructorUsedError;
   int get categorysIndex => throw _privateConstructorUsedError;
-  Category get category => throw _privateConstructorUsedError;
+  TransactionType get category => throw _privateConstructorUsedError;
 
   /// Serializes this Transaction to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -48,9 +49,10 @@ abstract class $TransactionCopyWith<$Res> {
       {String? uuid,
       String? userId,
       double amount,
+      String categoryName,
       @TimestampConverter() DateTime date,
       int categorysIndex,
-      Category category});
+      TransactionType category});
 }
 
 /// @nodoc
@@ -71,6 +73,7 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
     Object? uuid = freezed,
     Object? userId = freezed,
     Object? amount = null,
+    Object? categoryName = null,
     Object? date = null,
     Object? categorysIndex = null,
     Object? category = null,
@@ -88,6 +91,10 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as double,
+      categoryName: null == categoryName
+          ? _value.categoryName
+          : categoryName // ignore: cast_nullable_to_non_nullable
+              as String,
       date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
@@ -99,7 +106,7 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
-              as Category,
+              as TransactionType,
     ) as $Val);
   }
 }
@@ -116,9 +123,10 @@ abstract class _$$TransactionImplCopyWith<$Res>
       {String? uuid,
       String? userId,
       double amount,
+      String categoryName,
       @TimestampConverter() DateTime date,
       int categorysIndex,
-      Category category});
+      TransactionType category});
 }
 
 /// @nodoc
@@ -137,6 +145,7 @@ class __$$TransactionImplCopyWithImpl<$Res>
     Object? uuid = freezed,
     Object? userId = freezed,
     Object? amount = null,
+    Object? categoryName = null,
     Object? date = null,
     Object? categorysIndex = null,
     Object? category = null,
@@ -154,6 +163,10 @@ class __$$TransactionImplCopyWithImpl<$Res>
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as double,
+      categoryName: null == categoryName
+          ? _value.categoryName
+          : categoryName // ignore: cast_nullable_to_non_nullable
+              as String,
       date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
@@ -165,7 +178,7 @@ class __$$TransactionImplCopyWithImpl<$Res>
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
-              as Category,
+              as TransactionType,
     ));
   }
 }
@@ -177,6 +190,7 @@ class _$TransactionImpl implements _Transaction {
       {required this.uuid,
       required this.userId,
       required this.amount,
+      required this.categoryName,
       @TimestampConverter() required this.date,
       required this.categorysIndex,
       required this.category});
@@ -191,16 +205,18 @@ class _$TransactionImpl implements _Transaction {
   @override
   final double amount;
   @override
+  final String categoryName;
+  @override
   @TimestampConverter()
   final DateTime date;
   @override
   final int categorysIndex;
   @override
-  final Category category;
+  final TransactionType category;
 
   @override
   String toString() {
-    return 'Transaction(uuid: $uuid, userId: $userId, amount: $amount, date: $date, categorysIndex: $categorysIndex, category: $category)';
+    return 'Transaction(uuid: $uuid, userId: $userId, amount: $amount, categoryName: $categoryName, date: $date, categorysIndex: $categorysIndex, category: $category)';
   }
 
   @override
@@ -211,6 +227,8 @@ class _$TransactionImpl implements _Transaction {
             (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.amount, amount) || other.amount == amount) &&
+            (identical(other.categoryName, categoryName) ||
+                other.categoryName == categoryName) &&
             (identical(other.date, date) || other.date == date) &&
             (identical(other.categorysIndex, categorysIndex) ||
                 other.categorysIndex == categorysIndex) &&
@@ -220,8 +238,8 @@ class _$TransactionImpl implements _Transaction {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, uuid, userId, amount, date, categorysIndex, category);
+  int get hashCode => Object.hash(runtimeType, uuid, userId, amount,
+      categoryName, date, categorysIndex, category);
 
   /// Create a copy of Transaction
   /// with the given fields replaced by the non-null parameter values.
@@ -244,9 +262,10 @@ abstract class _Transaction implements Transaction {
       {required final String? uuid,
       required final String? userId,
       required final double amount,
+      required final String categoryName,
       @TimestampConverter() required final DateTime date,
       required final int categorysIndex,
-      required final Category category}) = _$TransactionImpl;
+      required final TransactionType category}) = _$TransactionImpl;
 
   factory _Transaction.fromJson(Map<String, dynamic> json) =
       _$TransactionImpl.fromJson;
@@ -258,12 +277,14 @@ abstract class _Transaction implements Transaction {
   @override
   double get amount;
   @override
+  String get categoryName;
+  @override
   @TimestampConverter()
   DateTime get date;
   @override
   int get categorysIndex;
   @override
-  Category get category;
+  TransactionType get category;
 
   /// Create a copy of Transaction
   /// with the given fields replaced by the non-null parameter values.

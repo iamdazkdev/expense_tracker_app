@@ -20,11 +20,11 @@ CategoryModel _$CategoryModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CategoryModel {
-  String get id => throw _privateConstructorUsedError; // id Firestore document
+  String? get id => throw _privateConstructorUsedError; // id Firestore document
   String get name => throw _privateConstructorUsedError; // Tên hiển thị
   String get iconName => throw _privateConstructorUsedError; // FontFamilyName
-  int get backgroundColorIcon =>
-      throw _privateConstructorUsedError; // Mã màu dạng int
+  int get colorName =>
+      throw _privateConstructorUsedError; // Mã màu dạng int (ARGB)
   String? get note => throw _privateConstructorUsedError;
 
   /// Serializes this CategoryModel to a JSON map.
@@ -44,11 +44,7 @@ abstract class $CategoryModelCopyWith<$Res> {
       _$CategoryModelCopyWithImpl<$Res, CategoryModel>;
   @useResult
   $Res call(
-      {String id,
-      String name,
-      String iconName,
-      int backgroundColorIcon,
-      String? note});
+      {String? id, String name, String iconName, int colorName, String? note});
 }
 
 /// @nodoc
@@ -66,17 +62,17 @@ class _$CategoryModelCopyWithImpl<$Res, $Val extends CategoryModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? name = null,
     Object? iconName = null,
-    Object? backgroundColorIcon = null,
+    Object? colorName = null,
     Object? note = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -85,9 +81,9 @@ class _$CategoryModelCopyWithImpl<$Res, $Val extends CategoryModel>
           ? _value.iconName
           : iconName // ignore: cast_nullable_to_non_nullable
               as String,
-      backgroundColorIcon: null == backgroundColorIcon
-          ? _value.backgroundColorIcon
-          : backgroundColorIcon // ignore: cast_nullable_to_non_nullable
+      colorName: null == colorName
+          ? _value.colorName
+          : colorName // ignore: cast_nullable_to_non_nullable
               as int,
       note: freezed == note
           ? _value.note
@@ -106,11 +102,7 @@ abstract class _$$CategoryModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
-      String name,
-      String iconName,
-      int backgroundColorIcon,
-      String? note});
+      {String? id, String name, String iconName, int colorName, String? note});
 }
 
 /// @nodoc
@@ -126,17 +118,17 @@ class __$$CategoryModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? name = null,
     Object? iconName = null,
-    Object? backgroundColorIcon = null,
+    Object? colorName = null,
     Object? note = freezed,
   }) {
     return _then(_$CategoryModelImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -145,9 +137,9 @@ class __$$CategoryModelImplCopyWithImpl<$Res>
           ? _value.iconName
           : iconName // ignore: cast_nullable_to_non_nullable
               as String,
-      backgroundColorIcon: null == backgroundColorIcon
-          ? _value.backgroundColorIcon
-          : backgroundColorIcon // ignore: cast_nullable_to_non_nullable
+      colorName: null == colorName
+          ? _value.colorName
+          : colorName // ignore: cast_nullable_to_non_nullable
               as int,
       note: freezed == note
           ? _value.note
@@ -164,14 +156,14 @@ class _$CategoryModelImpl implements _CategoryModel {
       {required this.id,
       required this.name,
       required this.iconName,
-      required this.backgroundColorIcon,
+      required this.colorName,
       this.note});
 
   factory _$CategoryModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$CategoryModelImplFromJson(json);
 
   @override
-  final String id;
+  final String? id;
 // id Firestore document
   @override
   final String name;
@@ -180,14 +172,14 @@ class _$CategoryModelImpl implements _CategoryModel {
   final String iconName;
 // FontFamilyName
   @override
-  final int backgroundColorIcon;
-// Mã màu dạng int
+  final int colorName;
+// Mã màu dạng int (ARGB)
   @override
   final String? note;
 
   @override
   String toString() {
-    return 'CategoryModel(id: $id, name: $name, iconName: $iconName, backgroundColorIcon: $backgroundColorIcon, note: $note)';
+    return 'CategoryModel(id: $id, name: $name, iconName: $iconName, colorName: $colorName, note: $note)';
   }
 
   @override
@@ -199,15 +191,15 @@ class _$CategoryModelImpl implements _CategoryModel {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.iconName, iconName) ||
                 other.iconName == iconName) &&
-            (identical(other.backgroundColorIcon, backgroundColorIcon) ||
-                other.backgroundColorIcon == backgroundColorIcon) &&
+            (identical(other.colorName, colorName) ||
+                other.colorName == colorName) &&
             (identical(other.note, note) || other.note == note));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, name, iconName, backgroundColorIcon, note);
+      Object.hash(runtimeType, id, name, iconName, colorName, note);
 
   /// Create a copy of CategoryModel
   /// with the given fields replaced by the non-null parameter values.
@@ -223,27 +215,33 @@ class _$CategoryModelImpl implements _CategoryModel {
       this,
     );
   }
+
+  @override
+  Categorys toCategorys() {
+    // TODO: implement toCategorys
+    throw UnimplementedError();
+  }
 }
 
 abstract class _CategoryModel implements CategoryModel {
   const factory _CategoryModel(
-      {required final String id,
+      {required final String? id,
       required final String name,
       required final String iconName,
-      required final int backgroundColorIcon,
+      required final int colorName,
       final String? note}) = _$CategoryModelImpl;
 
   factory _CategoryModel.fromJson(Map<String, dynamic> json) =
       _$CategoryModelImpl.fromJson;
 
   @override
-  String get id; // id Firestore document
+  String? get id; // id Firestore document
   @override
   String get name; // Tên hiển thị
   @override
   String get iconName; // FontFamilyName
   @override
-  int get backgroundColorIcon; // Mã màu dạng int
+  int get colorName; // Mã màu dạng int (ARGB)
   @override
   String? get note;
 

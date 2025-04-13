@@ -9,6 +9,6 @@ class TransactionState with _$TransactionState {
   const factory TransactionState.loadTransaction({
     required Categorys categorys,
     required DateTime transactionDate,
-    required Category transactionCategory,
+    required TransactionType transactionCategory,
   }) = LoadTransaction;
 }

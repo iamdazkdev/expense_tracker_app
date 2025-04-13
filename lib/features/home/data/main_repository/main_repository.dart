@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auth_user/auth_user.dart';
 import 'package:db_firestore_client/db_firestore_client.dart';
 import 'package:db_hive_client/db_hive_client.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../../../core/enum/categorys.dart';
 import '../../../../core/models/categories/category_model.dart';
@@ -34,40 +35,38 @@ class MainRepository implements MainBaseRepository {
     required int? limit,
   }) async {
     if (!_isUserLoggedIn) {
-      final hiveTransactions = _getHiveTransactions();
-      final result = await hiveTransactions;
-
-      // Convert the [TransactionHive] to [Transaction] and return the result
-      final transactions = result
+      final hiveTransactions = await _getHiveTransactions();
+      final transactions = hiveTransactions
           .map(Transaction.fromHiveModel)
-          .take(limit ?? result.length)
+          .take(limit ?? hiveTransactions.length)
           .toList();
-
       return AppResult.success(transactions);
     }
-    final transactions = await _getDataAndClearHive();
 
-    // Update the firestore and get the data
+    final transactions = await _getDataAndClearHive();
     final result = await _updateFirestoreAndGetData(transactions, limit);
+
+    final success = await addAllCategories();
+    debugPrint(success
+        ? 'Categories added successfully!'
+        : 'Failed to add categories.');
+
     return AppResult.success(result);
   }
 
   @override
   Future<AppResult<TotalsTransaction>> getTotals() async {
     if (!_isUserLoggedIn) {
-      final transactions = _getHiveTransactions();
-      final result = await transactions;
-
-      // Convert the [TransactionHive] to [Transaction] and calculate the totals
+      final transactions = await _getHiveTransactions();
       final totalsTransaction = TotalsTransaction.calculate(
-        result.map(Transaction.fromHiveModel).toList(),
+        transactions.map(Transaction.fromHiveModel).toList(),
       );
       return AppResult.success(totalsTransaction);
     }
+
     final transactions = await _getDataAndClearHive();
     final result = await _updateFirestoreAndGetData(transactions, null);
 
-    // Calculate the totals and return the result
     final totalsTransaction = TotalsTransaction.calculate(result);
     return AppResult.success(totalsTransaction);
   }
@@ -76,17 +75,12 @@ class MainRepository implements MainBaseRepository {
     final transactions = await _dbHiveClient.getAll<TransactionHive>(
       boxName: 'transactions',
     );
-
-    // Sort the transactions by amount
-    final transactionsOrderByAmount = transactions
-      ..sort((a, b) => b.amount.compareTo(a.amount));
-
-    return transactionsOrderByAmount;
+    transactions.sort((a, b) => b.amount.compareTo(a.amount));
+    return transactions;
   }
 
   Future<List<TransactionHive>> _getDataAndClearHive() async {
-    final transactions = _getHiveTransactions();
-
+    final transactions = await _getHiveTransactions();
     await _dbHiveClient.clearAll<TransactionHive>(boxName: 'transactions');
     return transactions;
   }
@@ -122,16 +116,84 @@ class MainRepository implements MainBaseRepository {
     return result;
   }
 
-  Future<void> uploadAllCategories(CategoryRepository repository) async {
-    for (final category in Categorys.values) {
-      final categoryModel = CategoryModel(
-        id: '', // Firestore sẽ tự generate ID
-        name: category.name,
-        backgroundColorIcon: category.backgroundColorIcon.value,
-        note: category.note,
-        iconName: category.icon.fontFamily ?? 'FontAwesomeSolid',
+/*
+  Future<bool> addAllCategories() async {
+    final existingCategories = await _dbFirestoreClient.getQuery<CategoryModel>(
+      collectionPath: 'categories',
+      mapper: (data, documentId) => CategoryModel.fromJson(data!),
+    );
+
+    final existingCategoryNames =
+        existingCategories.map((category) => category.name).toSet();
+
+    final categoryRepository = CategoryRepository(
+      dbFirestoreClient: _dbFirestoreClient,
+      authUser: _authUser,
+      dbHiveClient: _dbHiveClient,
+    );
+
+    final categoriesToAdd = Categorys.values.where(
+      (category) => !existingCategoryNames.contains(category.name),
+    );
+
+    final futures = categoriesToAdd.map((category) {
+      return categoryRepository.addAllCategories(
+        CategoryModel.empty(),
+        category,
       );
-      final result = await repository.addCategory(categoryModel);
+    }).toList();
+
+    final results = await Future.wait(futures);
+
+    for (var i = 0; i < results.length; i++) {
+      final category = categoriesToAdd.elementAt(i);
+      results[i].when(
+        success: (_) =>
+            debugPrint('Successfully added category: ${category.name}'),
+        failure: (error) => debugPrint(
+            'Failed to add category: ${category.name}, Error: $error'),
+      );
     }
+
+    return true;
+  }
+*/
+  Future<bool> addAllCategories() async {
+    final existingCategories = await _dbFirestoreClient.getQuery<CategoryModel>(
+      collectionPath: 'categories',
+      mapper: (data, documentId) => CategoryModel.fromJson(data!),
+    );
+
+    // Nếu đã có categories thì không thêm nữa
+    if (existingCategories.isNotEmpty) {
+      debugPrint('Categories đã tồn tại, không cần thêm.');
+      return true;
+    }
+
+    final categoryRepository = CategoryRepository(
+      dbFirestoreClient: _dbFirestoreClient,
+      authUser: _authUser,
+      dbHiveClient: _dbHiveClient,
+    );
+
+    final futures = Categorys.values.map((category) {
+      return categoryRepository.addAllCategories(
+        CategoryModel.empty(),
+        category,
+      );
+    }).toList();
+
+    final results = await Future.wait(futures);
+
+    for (var i = 0; i < results.length; i++) {
+      results[i].when(
+        success: (_) => debugPrint(
+            'Successfully added category: ${Categorys.values[i].name}'),
+        failure: (error) => debugPrint(
+            'Failed to add category: ${Categorys.values[i].name}, Error: $error'),
+      );
+    }
+
+    return true;
   }
 }

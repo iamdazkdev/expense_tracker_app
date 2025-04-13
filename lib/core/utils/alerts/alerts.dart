@@ -129,7 +129,7 @@ class Alerts {
                 onOk();
                 Navigator.of(context).pop();
               },
-              child: const Text('OK'),
+              child: const Text('Đồng ý'),
             ),
             if (onCancel != null)
               TextButton(
@@ -137,7 +137,7 @@ class Alerts {
                   onCancel();
                   Navigator.of(context).pop();
                 },
-                child: const Text('Cancel'),
+                child: const Text('Huỷ'),
               ),
           ],
         );

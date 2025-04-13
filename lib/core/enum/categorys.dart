@@ -14,7 +14,13 @@ enum Categorys {
     backgroundColorIcon: Colors.blue,
     note: 'Đi lại, xăng xe, phương tiện công cộng',
   ),
-  shopping(
+  others(
+    name: 'Khác',
+    icon: FontAwesomeIcons.ellipsis,
+    backgroundColorIcon: Colors.yellow,
+    note: "Vui lòng thêm 1 cái khác",
+  ),
+/*  shopping(
     name: 'Mua sắm',
     icon: FontAwesomeIcons.cartShopping,
     backgroundColorIcon: Colors.green,
@@ -25,7 +31,7 @@ enum Categorys {
     icon: FontAwesomeIcons.ellipsis,
     backgroundColorIcon: Colors.yellow,
     note: null,
-  ),
+  ),s
   personal(
     name: 'Cá nhân',
     icon: FontAwesomeIcons.user,
@@ -235,7 +241,8 @@ enum Categorys {
     icon: FontAwesomeIcons.gamepad,
     backgroundColorIcon: Colors.cyanAccent,
     note: 'Mua game, đồ chơi game',
-  );
+  );*/
+  ;
 
   final String name;
   final IconData icon;
@@ -252,6 +259,22 @@ enum Categorys {
   static Categorys fromIndex(int categoryIndex) {
     return Categorys.values.firstWhere(
       (category) => category.index == categoryIndex,
+      orElse: () => Categorys.others,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'icon': icon.codePoint,
+      'backgroundColorIcon': backgroundColorIcon.toARGB32(),
+      'note': note,
+    };
+  }
+
+  factory Categorys.fromMap(Map<String, dynamic> map) {
+    return Categorys.values.firstWhere(
+      (category) => category.name == map['name'],
       orElse: () => Categorys.others,
     );
   }

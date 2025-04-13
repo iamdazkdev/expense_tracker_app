@@ -66,7 +66,7 @@ class TransactionList extends StatelessWidget {
           Text(
             transaction.amount.toCurrencyWithSymbol(),
             style: AppTextStyle.subtitle.copyWith(
-              color: transaction.category == Category.expense
+              color: transaction.category == TransactionType.expense
                   ? Colors.redAccent
                   : Colors.greenAccent,
             ),
@@ -138,8 +138,8 @@ class TransactionList extends StatelessWidget {
     context.pop();
     Alerts.showAlertDialog(
       context: context,
-      title: 'Delete Transaction',
-      message: 'Are you sure you want to delete this transaction?',
+      title: 'Xóa giao dịch',
+      message: 'Bạn có chắc chắn muốn xóa giao dịch này không?',
       onOk: () {
         debugPrint('transaction.uuid: ${transaction.uuid}');
         context.read<TransactionCubit>().deleteTransaction(transaction.uuid!);

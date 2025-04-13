@@ -12,15 +12,14 @@ part 'profile_cubit.freezed.dart';
 part 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
+  final NetworkBaseInfo _networkInfo;
+  final ProfileBaseRepository _profileRepository;
   ProfileCubit({
     required ProfileBaseRepository profileRepository,
     required NetworkBaseInfo networkInfo,
   })  : _profileRepository = profileRepository,
         _networkInfo = networkInfo,
         super(const ProfileState.initial());
-
-  final NetworkBaseInfo _networkInfo;
-  final ProfileBaseRepository _profileRepository;
 
   /// The [GlobalKey] is used to identify the [Form] and
   final formKey = GlobalKey<FormState>();
