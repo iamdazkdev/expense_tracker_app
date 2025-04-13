@@ -47,12 +47,11 @@ class CategoryRepository implements CategoryBaseRepository {
   Future<AppResult<void>> addCategory(CategoryModel category) async {
     // TODO: implement addCategory
     try {
-      debugPrint("Trying add Categories to FireStore");
       if (isUserLoggedIn) {
         await _dbFirestoreClient.setDocument(
           collectionPath: 'categories',
           merge: false,
-          documentId: category.id!,
+          documentId: category.uuid,
           data: category.toJson(),
         );
       }
@@ -69,7 +68,7 @@ class CategoryRepository implements CategoryBaseRepository {
     try {
       if (isUserLoggedIn) {
         await _dbFirestoreClient.updateDocument(
-          collectionPath: 'categories/${category.id}',
+          collectionPath: 'categories/${category.uuid}',
           data: category.toJson(),
         );
       }

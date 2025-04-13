@@ -157,3 +157,21 @@ extension StringFormattingWithCurrency on String {
     return double.tryParse(this) ?? 0.0;
   }
 }
+
+extension MaskAccountExtension on String {
+  /// Ẩn số tài khoản, chỉ hiển thị `lastLength` số cuối.
+  /// Ví dụ: "1234 5678 9012 3456" -> "XXXX XXXX XXXX 3456"
+  String maskAccount([int lastLength = 4]) {
+    if (length < lastLength) return this;
+    int lengthToMask = length - lastLength;
+    String generated = "";
+    if (lengthToMask > 0) {
+      generated += substring(0, lengthToMask)
+          .split("")
+          .map((e) => e == " " ? " " : "X")
+          .join("");
+    }
+    generated += substring(lengthToMask);
+    return generated;
+  }
+}

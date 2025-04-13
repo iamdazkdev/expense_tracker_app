@@ -9,7 +9,7 @@ part 'category_model.g.dart';
 @freezed
 class CategoryModel with _$CategoryModel {
   const factory CategoryModel({
-    required String id, // id Firestore document
+    required String uuid, // id Firestore document
     required String name, // Tên hiển thị
     required String iconName, // FontFamilyName
     required int colorName, // Mã màu dạng int (ARGB)
@@ -21,7 +21,7 @@ class CategoryModel with _$CategoryModel {
 
   factory CategoryModel.empty() {
     return const CategoryModel(
-      id: '',
+      uuid: '',
       name: '',
       iconName: 'bus', // Font fallback nếu null
       colorName: 0xFFFF0000, // Default color red
@@ -35,7 +35,7 @@ class CategoryModel with _$CategoryModel {
     required String id,
   }) {
     return CategoryModel(
-      id: id,
+      uuid: id,
       name: categorys.name,
       iconName: categorys.icon.codePoint.toString(),
       colorName:

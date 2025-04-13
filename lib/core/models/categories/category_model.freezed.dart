@@ -20,7 +20,8 @@ CategoryModel _$CategoryModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CategoryModel {
-  String? get id => throw _privateConstructorUsedError; // id Firestore document
+  String get uuid =>
+      throw _privateConstructorUsedError; // id Firestore document
   String get name => throw _privateConstructorUsedError; // Tên hiển thị
   String get iconName => throw _privateConstructorUsedError; // FontFamilyName
   int get colorName =>
@@ -44,7 +45,7 @@ abstract class $CategoryModelCopyWith<$Res> {
       _$CategoryModelCopyWithImpl<$Res, CategoryModel>;
   @useResult
   $Res call(
-      {String? id, String name, String iconName, int colorName, String? note});
+      {String uuid, String name, String iconName, int colorName, String? note});
 }
 
 /// @nodoc
@@ -62,17 +63,17 @@ class _$CategoryModelCopyWithImpl<$Res, $Val extends CategoryModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? uuid = null,
     Object? name = null,
     Object? iconName = null,
     Object? colorName = null,
     Object? note = freezed,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+      uuid: null == uuid
+          ? _value.uuid
+          : uuid // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -102,7 +103,7 @@ abstract class _$$CategoryModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? id, String name, String iconName, int colorName, String? note});
+      {String uuid, String name, String iconName, int colorName, String? note});
 }
 
 /// @nodoc
@@ -118,17 +119,17 @@ class __$$CategoryModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? uuid = null,
     Object? name = null,
     Object? iconName = null,
     Object? colorName = null,
     Object? note = freezed,
   }) {
     return _then(_$CategoryModelImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+      uuid: null == uuid
+          ? _value.uuid
+          : uuid // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -153,7 +154,7 @@ class __$$CategoryModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CategoryModelImpl implements _CategoryModel {
   const _$CategoryModelImpl(
-      {required this.id,
+      {required this.uuid,
       required this.name,
       required this.iconName,
       required this.colorName,
@@ -163,7 +164,7 @@ class _$CategoryModelImpl implements _CategoryModel {
       _$$CategoryModelImplFromJson(json);
 
   @override
-  final String? id;
+  final String uuid;
 // id Firestore document
   @override
   final String name;
@@ -179,7 +180,7 @@ class _$CategoryModelImpl implements _CategoryModel {
 
   @override
   String toString() {
-    return 'CategoryModel(id: $id, name: $name, iconName: $iconName, colorName: $colorName, note: $note)';
+    return 'CategoryModel(uuid: $uuid, name: $name, iconName: $iconName, colorName: $colorName, note: $note)';
   }
 
   @override
@@ -187,7 +188,7 @@ class _$CategoryModelImpl implements _CategoryModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CategoryModelImpl &&
-            (identical(other.id, id) || other.id == id) &&
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.iconName, iconName) ||
                 other.iconName == iconName) &&
@@ -199,7 +200,7 @@ class _$CategoryModelImpl implements _CategoryModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, name, iconName, colorName, note);
+      Object.hash(runtimeType, uuid, name, iconName, colorName, note);
 
   /// Create a copy of CategoryModel
   /// with the given fields replaced by the non-null parameter values.
@@ -225,7 +226,7 @@ class _$CategoryModelImpl implements _CategoryModel {
 
 abstract class _CategoryModel implements CategoryModel {
   const factory _CategoryModel(
-      {required final String? id,
+      {required final String uuid,
       required final String name,
       required final String iconName,
       required final int colorName,
@@ -235,7 +236,7 @@ abstract class _CategoryModel implements CategoryModel {
       _$CategoryModelImpl.fromJson;
 
   @override
-  String? get id; // id Firestore document
+  String get uuid; // id Firestore document
   @override
   String get name; // Tên hiển thị
   @override

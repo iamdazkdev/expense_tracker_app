@@ -20,7 +20,7 @@ CardModel _$CardModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CardModel {
-  int? get id => throw _privateConstructorUsedError;
+  String? get uuid => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get holderName => throw _privateConstructorUsedError;
   String get accountNumber =>
@@ -47,7 +47,7 @@ abstract class $CardModelCopyWith<$Res> {
       _$CardModelCopyWithImpl<$Res, CardModel>;
   @useResult
   $Res call(
-      {int? id,
+      {String? uuid,
       String name,
       String holderName,
       String accountNumber,
@@ -73,7 +73,7 @@ class _$CardModelCopyWithImpl<$Res, $Val extends CardModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? uuid = freezed,
     Object? name = null,
     Object? holderName = null,
     Object? accountNumber = null,
@@ -84,10 +84,10 @@ class _$CardModelCopyWithImpl<$Res, $Val extends CardModel>
     Object? expense = freezed,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
+      uuid: freezed == uuid
+          ? _value.uuid
+          : uuid // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -133,7 +133,7 @@ abstract class _$$CardModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int? id,
+      {String? uuid,
       String name,
       String holderName,
       String accountNumber,
@@ -157,7 +157,7 @@ class __$$CardModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? uuid = freezed,
     Object? name = null,
     Object? holderName = null,
     Object? accountNumber = null,
@@ -168,10 +168,10 @@ class __$$CardModelImplCopyWithImpl<$Res>
     Object? expense = freezed,
   }) {
     return _then(_$CardModelImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
+      uuid: freezed == uuid
+          ? _value.uuid
+          : uuid // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -212,7 +212,7 @@ class __$$CardModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CardModelImpl implements _CardModel {
   const _$CardModelImpl(
-      {this.id,
+      {this.uuid,
       required this.name,
       required this.holderName,
       required this.accountNumber,
@@ -226,7 +226,7 @@ class _$CardModelImpl implements _CardModel {
       _$$CardModelImplFromJson(json);
 
   @override
-  final int? id;
+  final String? uuid;
   @override
   final String name;
   @override
@@ -247,7 +247,7 @@ class _$CardModelImpl implements _CardModel {
 
   @override
   String toString() {
-    return 'CardModel(id: $id, name: $name, holderName: $holderName, accountNumber: $accountNumber, color: $color, isDefault: $isDefault, balance: $balance, income: $income, expense: $expense)';
+    return 'CardModel(uuid: $uuid, name: $name, holderName: $holderName, accountNumber: $accountNumber, color: $color, isDefault: $isDefault, balance: $balance, income: $income, expense: $expense)';
   }
 
   @override
@@ -255,7 +255,7 @@ class _$CardModelImpl implements _CardModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CardModelImpl &&
-            (identical(other.id, id) || other.id == id) &&
+            (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.holderName, holderName) ||
                 other.holderName == holderName) &&
@@ -271,7 +271,7 @@ class _$CardModelImpl implements _CardModel {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, holderName,
+  int get hashCode => Object.hash(runtimeType, uuid, name, holderName,
       accountNumber, color, isDefault, balance, income, expense);
 
   /// Create a copy of CardModel
@@ -292,7 +292,7 @@ class _$CardModelImpl implements _CardModel {
 
 abstract class _CardModel implements CardModel {
   const factory _CardModel(
-      {final int? id,
+      {final String? uuid,
       required final String name,
       required final String holderName,
       required final String accountNumber,
@@ -306,7 +306,7 @@ abstract class _CardModel implements CardModel {
       _$CardModelImpl.fromJson;
 
   @override
-  int? get id;
+  String? get uuid;
   @override
   String get name;
   @override

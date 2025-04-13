@@ -1,3 +1,4 @@
+import 'package:daily_expense_tracker_app/features/cards/view/card_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:user_service/user_service.dart';
@@ -19,6 +20,7 @@ class RoutesName {
   static const String allViewTransaction = '/allViewTransaction';
   static const String loginWithAccount = '/loginWithAccount';
   static const String categories = '/categories';
+  static const String cards = '/cards';
 }
 
 @immutable
@@ -56,11 +58,19 @@ class AppRouter {
           routeName: settings.name,
           viewToShow: const AllViewTransaction(),
         );
+
       case RoutesName.categories:
         return _getPageRoute(
           routeName: settings.name,
           viewToShow: const CategoryView(),
         );
+
+      case RoutesName.cards:
+        return _getPageRoute(
+          routeName: settings.name,
+          viewToShow: const CardView(),
+        );
+
       default:
         return _getPageRoute(
           routeName: settings.name,

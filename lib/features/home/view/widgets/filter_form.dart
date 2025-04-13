@@ -36,7 +36,7 @@ class _FilterFormState extends State<FilterForm> {
 
     return Column(
       children: [
-        _buidlHeaderText('Ngày bắt đầu'),
+        _buildHeaderText('Ngày bắt đầu'),
         const SizedBox(height: 10),
         CustomItemButton(
           text: startDate.formattedDateOnly,
@@ -48,10 +48,10 @@ class _FilterFormState extends State<FilterForm> {
           backgroundIcon: context.colorScheme.outline,
           backgroundItem: backgroundItem,
           icon: FontAwesomeIcons.wallet,
-          onPressed: () => _showPickeDate(context, startDate, true),
+          onPressed: () => _showPickerDate(context, startDate, true),
         ),
         const SizedBox(height: 15),
-        _buidlHeaderText('Ngày kết thúc'),
+        _buildHeaderText('Ngày kết thúc'),
         const SizedBox(height: 10),
         CustomItemButton(
           text: endDate.formattedDateOnly,
@@ -63,21 +63,21 @@ class _FilterFormState extends State<FilterForm> {
           backgroundIcon: context.colorScheme.outline,
           backgroundItem: backgroundItem,
           icon: FontAwesomeIcons.wallet,
-          onPressed: () => _showPickeDate(context, endDate, false),
+          onPressed: () => _showPickerDate(context, endDate, false),
         ),
         const SizedBox(height: 30),
       ],
     );
   }
 
-  Widget _buidlHeaderText(String title) {
+  Widget _buildHeaderText(String title) {
     return Row(children: [
       const SizedBox(width: 8),
       Text(title, style: AppTextStyle.body)
     ]);
   }
 
-  Future<DateTime?> _showPickeDate(
+  Future<DateTime?> _showPickerDate(
     BuildContext context,
     DateTime initialDate,
     bool isStartDate,

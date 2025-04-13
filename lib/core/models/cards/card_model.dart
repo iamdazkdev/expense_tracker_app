@@ -7,7 +7,7 @@ part 'card_model.g.dart';
 @freezed
 class CardModel with _$CardModel {
   const factory CardModel({
-    int? id,
+    String? uuid,
     required String name,
     required String holderName,
     required String accountNumber,
@@ -26,7 +26,7 @@ class CardModel with _$CardModel {
   // Phương thức empty trả về đối tượng CardModel mặc định
   static CardModel empty() {
     return CardModel(
-      id: null,
+      uuid: null,
       name: '',
       holderName: '',
       accountNumber: '',
@@ -38,4 +38,9 @@ class CardModel with _$CardModel {
       expense: 0.0,
     );
   }
+}
+
+extension CardModelColorExtension on CardModel {
+  /// Lấy lại màu sắc từ `CardModel` dưới dạng `Color`
+  Color get getColor => Color(color); // Chuyển ARGB (int) thành Color
 }

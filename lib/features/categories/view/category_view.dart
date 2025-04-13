@@ -48,12 +48,10 @@ class _CategoryViewState extends State<CategoryView> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          setState(() {
-            // Trigger re-fetching of categories
-          });
+          setState(() {});
         },
         child: FutureBuilder<List<CategoryModel>>(
-          future: loadData(), // Call loadData() to fetch categories
+          future: loadData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
@@ -88,6 +86,7 @@ class _CategoryViewState extends State<CategoryView> {
                               ));
                     },
                     leading: CircleAvatar(
+                      // ignore: deprecated_member_use
                       backgroundColor: category.color.withOpacity(0.2),
                     ),
                     title: Text(
@@ -124,9 +123,7 @@ class _CategoryViewState extends State<CategoryView> {
             context: context,
             builder: (builder) => CategoryForm(
               onSave: () {
-                setState(() {
-                  // Reload data after adding a new category
-                });
+                setState(() {});
               },
             ),
           );

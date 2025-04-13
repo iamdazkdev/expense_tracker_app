@@ -8,7 +8,7 @@ part of 'card_model.dart';
 
 _$CardModelImpl _$$CardModelImplFromJson(Map<String, dynamic> json) =>
     _$CardModelImpl(
-      id: (json['id'] as num?)?.toInt(),
+      uuid: json['uuid'] as String?,
       name: json['name'] as String,
       holderName: json['holderName'] as String,
       accountNumber: json['accountNumber'] as String,
@@ -21,7 +21,7 @@ _$CardModelImpl _$$CardModelImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$CardModelImplToJson(_$CardModelImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'uuid': instance.uuid,
       'name': instance.name,
       'holderName': instance.holderName,
       'accountNumber': instance.accountNumber,

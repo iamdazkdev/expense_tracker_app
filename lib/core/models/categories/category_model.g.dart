@@ -8,7 +8,7 @@ part of 'category_model.dart';
 
 _$CategoryModelImpl _$$CategoryModelImplFromJson(Map<String, dynamic> json) =>
     _$CategoryModelImpl(
-      id: json['id'] as String?,
+      uuid: json['uuid'] as String,
       name: json['name'] as String,
       iconName: json['iconName'] as String,
       colorName: (json['colorName'] as num).toInt(),
@@ -17,7 +17,7 @@ _$CategoryModelImpl _$$CategoryModelImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$CategoryModelImplToJson(_$CategoryModelImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'uuid': instance.uuid,
       'name': instance.name,
       'iconName': instance.iconName,
       'colorName': instance.colorName,

@@ -45,7 +45,7 @@ class _CategoryForm extends State<CategoryForm> {
 
     categoryModel = widget.category ??
         CategoryModel(
-          id: Helper.generateUUID(),
+          uuid: Helper.generateUUID(),
           name: "",
           iconName: "",
           colorName: Colors.blue.toARGB32(),
@@ -73,13 +73,15 @@ class _CategoryForm extends State<CategoryForm> {
         widget.onSave!();
       }
 
-      Navigator.pop(context);
+      setState(() {
+        Navigator.pop(context);
+      });
     }
   }
 
   void onDelete(BuildContext context) async {
     if (widget.category != null) {
-      debugPrint("Id category for delete: ${widget.category!.id}");
+      debugPrint("Id category for delete: ${widget.category!.uuid}");
       final shouldDelete = await showDialog<bool>(
         context: context,
         builder: (context) {
@@ -102,11 +104,13 @@ class _CategoryForm extends State<CategoryForm> {
       );
 
       if (shouldDelete == true) {
-        await _categoryRepository.deleteCategory(widget.category!.id!);
+        await _categoryRepository.deleteCategory(widget.category!.uuid);
         if (widget.onSave != null) {
           widget.onSave!(); // Gọi callback để làm mới dữ liệu trong view
         }
-        Navigator.pop(context);
+        setState(() {
+          Navigator.pop(context);
+        });
       }
     }
   }
@@ -285,10 +289,7 @@ class _CategoryForm extends State<CategoryForm> {
                         height: 45,
                         margin: const EdgeInsets.symmetric(horizontal: 2.5),
                         decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.1),
+                          color: Theme.of(context).colorScheme.primary,
                           borderRadius: BorderRadius.circular(40),
                           border: Border.all(
                             width: 2,
