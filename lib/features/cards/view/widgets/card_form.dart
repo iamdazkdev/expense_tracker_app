@@ -133,6 +133,42 @@ class _AccountForm extends State<CardForm> {
     return true;
   }
 
+  void onDelete(BuildContext context) async {
+    if (widget.card != null) {
+      debugPrint("Id category for delete: ${widget.card!.uuid}");
+      final shouldDelete = await showDialog<bool>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Xoá danh mục'),
+            content:
+                const Text('Bạn có chắc chắn muốn xoá danh mục này không?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Hủy'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text('Xoá'),
+              ),
+            ],
+          );
+        },
+      );
+
+      if (shouldDelete == true) {
+        await _cardRepository.deleteCard(widget.card!.uuid!);
+        if (widget.onSave != null) {
+          widget.onSave!(); // Gọi callback để làm mới dữ liệu trong view
+        }
+        setState(() {
+          Navigator.pop(context);
+        });
+      }
+    }
+  }
+
   @override
   void dispose() {
     _cardNumberController.dispose();
@@ -145,9 +181,21 @@ class _AccountForm extends State<CardForm> {
       return const CircularProgressIndicator();
     }
     return AlertDialog(
-      title: Text(
-        widget.card != null ? "Chỉnh sửa thẻ" : "Thêm thẻ mới",
-        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+      title: Row(
+        children: [
+          Text(
+            widget.card != null ? "Chỉnh sửa thẻ" : "Thêm thẻ mới",
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          ),
+          const Spacer(),
+          if (widget.isEdit ?? false)
+            IconButton(
+              icon: const Icon(Icons.delete, color: Colors.red),
+              onPressed: () {
+                onDelete(context);
+              },
+            ),
+        ],
       ),
       scrollable: true,
       insetPadding: const EdgeInsets.all(20),
@@ -190,11 +238,6 @@ class _AccountForm extends State<CardForm> {
                         contentPadding: const EdgeInsets.symmetric(
                             vertical: 12, horizontal: 15),
                       ),
-                      /*  onChanged: (text) {
-                        setState(() {
-                          _cardModel = _cardModel!.copyWith(name: text.trim());
-                        });
-                      },*/
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return 'Vui lòng nhập tên thẻ';
