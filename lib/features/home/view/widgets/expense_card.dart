@@ -150,8 +150,8 @@ class ExpenseCard extends StatelessWidget {
   }
 
   String _getAmount(double amount) {
-    return amount.toCurrencyWithSymbol().length > 9
-        ? '${amount.toCurrencyWithSymbol().substring(0, 9).trim()}..'
+    return amount.toCurrencyWithSymbol().length > 15
+        ? '${amount.toCurrencyWithSymbol().substring(0, 15).trim()}..'
         : amount.toCurrencyWithSymbol();
   }
 }

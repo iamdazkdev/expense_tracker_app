@@ -13,6 +13,7 @@ class CategoryModel with _$CategoryModel {
     required String name,
     required String iconName,
     required int colorName,
+    required int? index,
     String? note,
   }) = _CategoryModel;
 
@@ -26,6 +27,7 @@ class CategoryModel with _$CategoryModel {
       iconName: 'bus',
       colorName: 0xFFFF0000,
       note: null,
+      index: null,
     );
   }
 
@@ -40,7 +42,7 @@ class CategoryModel with _$CategoryModel {
       iconName: categorys.icon.codePoint.toString(),
       colorName:
           categorys.backgroundColorIcon.toARGB32(), // Store color as ARGB
-      note: categorys.note,
+      note: categorys.note, index: categorys.index,
     );
   }
 }

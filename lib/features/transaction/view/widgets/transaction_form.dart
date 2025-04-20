@@ -76,7 +76,7 @@ class _TransactionFormState extends State<TransactionForm> {
         final cardID = state.mapOrNull(
           loadTransaction: (state) => state.cardID,
         );
-        final selectedCard = listCards.firstWhere(
+        /*  final selectedCard = listCards.firstWhere(
           (card) => card.uuid == cardID,
           orElse: () => CardModel(
               name: 'Loại thẻ', holderName: '', accountNumber: '', color: 12),
@@ -86,8 +86,7 @@ class _TransactionFormState extends State<TransactionForm> {
             (e) => e.name.toLowerCase().trim() == name.toLowerCase().trim(),
             orElse: () => Categorys.others,
           );
-        }
-
+        }*/
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -197,7 +196,6 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   void _showModalSheetCategory(BuildContext context) {
-    // Hàm tìm Categorys từ tên
     Categorys? getCategoryByName(String name) {
       return Categorys.values.firstWhere(
         (e) => e.name.toLowerCase().trim() == name.toLowerCase().trim(),
@@ -205,6 +203,7 @@ class _TransactionFormState extends State<TransactionForm> {
       );
     }
 
+    debugPrint("List categories at Sheet is: ${listCategories.toString()}");
     Alerts.showSheet(
       context: context,
       child: Expanded(

@@ -24,6 +24,7 @@ mixin _$CategoryModel {
   String get name => throw _privateConstructorUsedError;
   String get iconName => throw _privateConstructorUsedError;
   int get colorName => throw _privateConstructorUsedError;
+  int? get index => throw _privateConstructorUsedError;
   String? get note => throw _privateConstructorUsedError;
 
   /// Serializes this CategoryModel to a JSON map.
@@ -43,7 +44,12 @@ abstract class $CategoryModelCopyWith<$Res> {
       _$CategoryModelCopyWithImpl<$Res, CategoryModel>;
   @useResult
   $Res call(
-      {String uuid, String name, String iconName, int colorName, String? note});
+      {String uuid,
+      String name,
+      String iconName,
+      int colorName,
+      int? index,
+      String? note});
 }
 
 /// @nodoc
@@ -65,6 +71,7 @@ class _$CategoryModelCopyWithImpl<$Res, $Val extends CategoryModel>
     Object? name = null,
     Object? iconName = null,
     Object? colorName = null,
+    Object? index = freezed,
     Object? note = freezed,
   }) {
     return _then(_value.copyWith(
@@ -84,6 +91,10 @@ class _$CategoryModelCopyWithImpl<$Res, $Val extends CategoryModel>
           ? _value.colorName
           : colorName // ignore: cast_nullable_to_non_nullable
               as int,
+      index: freezed == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int?,
       note: freezed == note
           ? _value.note
           : note // ignore: cast_nullable_to_non_nullable
@@ -101,7 +112,12 @@ abstract class _$$CategoryModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String uuid, String name, String iconName, int colorName, String? note});
+      {String uuid,
+      String name,
+      String iconName,
+      int colorName,
+      int? index,
+      String? note});
 }
 
 /// @nodoc
@@ -121,6 +137,7 @@ class __$$CategoryModelImplCopyWithImpl<$Res>
     Object? name = null,
     Object? iconName = null,
     Object? colorName = null,
+    Object? index = freezed,
     Object? note = freezed,
   }) {
     return _then(_$CategoryModelImpl(
@@ -140,6 +157,10 @@ class __$$CategoryModelImplCopyWithImpl<$Res>
           ? _value.colorName
           : colorName // ignore: cast_nullable_to_non_nullable
               as int,
+      index: freezed == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int?,
       note: freezed == note
           ? _value.note
           : note // ignore: cast_nullable_to_non_nullable
@@ -156,6 +177,7 @@ class _$CategoryModelImpl implements _CategoryModel {
       required this.name,
       required this.iconName,
       required this.colorName,
+      required this.index,
       this.note});
 
   factory _$CategoryModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -170,11 +192,13 @@ class _$CategoryModelImpl implements _CategoryModel {
   @override
   final int colorName;
   @override
+  final int? index;
+  @override
   final String? note;
 
   @override
   String toString() {
-    return 'CategoryModel(uuid: $uuid, name: $name, iconName: $iconName, colorName: $colorName, note: $note)';
+    return 'CategoryModel(uuid: $uuid, name: $name, iconName: $iconName, colorName: $colorName, index: $index, note: $note)';
   }
 
   @override
@@ -188,13 +212,14 @@ class _$CategoryModelImpl implements _CategoryModel {
                 other.iconName == iconName) &&
             (identical(other.colorName, colorName) ||
                 other.colorName == colorName) &&
+            (identical(other.index, index) || other.index == index) &&
             (identical(other.note, note) || other.note == note));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, uuid, name, iconName, colorName, note);
+      Object.hash(runtimeType, uuid, name, iconName, colorName, index, note);
 
   /// Create a copy of CategoryModel
   /// with the given fields replaced by the non-null parameter values.
@@ -218,6 +243,7 @@ abstract class _CategoryModel implements CategoryModel {
       required final String name,
       required final String iconName,
       required final int colorName,
+      required final int? index,
       final String? note}) = _$CategoryModelImpl;
 
   factory _CategoryModel.fromJson(Map<String, dynamic> json) =
@@ -231,6 +257,8 @@ abstract class _CategoryModel implements CategoryModel {
   String get iconName;
   @override
   int get colorName;
+  @override
+  int? get index;
   @override
   String? get note;
 

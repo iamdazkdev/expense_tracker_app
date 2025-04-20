@@ -68,8 +68,9 @@ class TransactionCubit extends Cubit<TransactionState> {
   }
 
   void onCategoryChanged(CategoryModel category) {
-    _transaction =
-        _transaction.copyWith(categoryName: category.name, categorysIndex: 1);
+    _transaction = _transaction.copyWith(
+        categoryName: category.name,
+        categorysIndex: category.index != null ? category.index! : 1);
     emit(_buildState());
   }
 

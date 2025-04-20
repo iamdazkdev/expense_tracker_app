@@ -144,7 +144,7 @@ class _FilterFormState extends State<FilterForm> {
     return Column(
       children: [
         _buildHeaderText('Ngày kết thúc'),
-        const SizedBox(height: 10),
+        const SizedBox(height: 3),
         CustomItemButton(
           text: startDate.formattedDateOnly,
           padding: padding,
@@ -159,9 +159,9 @@ class _FilterFormState extends State<FilterForm> {
               ? () => _showPickerDate(context, startDate, true)
               : null,
         ),
-        const SizedBox(height: 15),
+        const SizedBox(height: 6),
         _buildHeaderText('Ngày bắt đầu'),
-        const SizedBox(height: 10),
+        const SizedBox(height: 3),
         CustomItemButton(
           text: endDate.formattedDateOnly,
           padding: padding,
@@ -176,7 +176,7 @@ class _FilterFormState extends State<FilterForm> {
               ? () => _showPickerDate(context, endDate, false)
               : null,
         ),
-        const SizedBox(height: 15),
+        //const SizedBox(height: 15),
         _buildOrangeBorderBoxes(),
       ],
     );

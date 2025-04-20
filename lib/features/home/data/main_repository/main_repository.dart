@@ -138,13 +138,6 @@ class MainRepository implements MainBaseRepository {
 
   Future<bool> addAllCategories() async {
     final prefs = await SharedPreferences.getInstance();
-    /*final hasAddedCategories = prefs.getBool('has_added_categories') ?? false;
-
-    if (hasAddedCategories) {
-      debugPrint("⚠️ addAllCategories đã được gọi trước đó, bỏ qua...");
-      return true;
-    }*/
-
     try {
       final existingCategories =
           await _dbFirestoreClient.getQuery<CategoryModel>(

@@ -50,6 +50,7 @@ class _CategoryForm extends State<CategoryForm> {
           iconName: "",
           colorName: Colors.blue.toARGB32(),
           note: "",
+          index: null,
         );
 
     _nameController = TextEditingController(text: categoryModel.name);
