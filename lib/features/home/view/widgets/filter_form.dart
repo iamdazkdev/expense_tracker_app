@@ -122,8 +122,6 @@ class FilterForm extends StatefulWidget {
 class _FilterFormState extends State<FilterForm> {
   late DateTime startDate;
   late DateTime endDate;
-
-  // Thêm biến để theo dõi box nào được chọn
   String? selectedBox;
 
   @override
@@ -176,7 +174,6 @@ class _FilterFormState extends State<FilterForm> {
               ? () => _showPickerDate(context, endDate, false)
               : null,
         ),
-        //const SizedBox(height: 15),
         _buildOrangeBorderBoxes(),
       ],
     );
@@ -215,15 +212,9 @@ class _FilterFormState extends State<FilterForm> {
         setState(() {
           selectedBox = isSelected ? null : title;
         });
-
-        // Gửi dữ liệu về cha
         if (widget.onRangeSelected != null) {
           widget.onRangeSelected!(selectedBox);
         }
-
-        /*if (!isSelected) {
-          context.read<StateCubit>().applyQuickFilter(title);
-        }*/
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
