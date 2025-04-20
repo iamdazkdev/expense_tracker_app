@@ -28,6 +28,7 @@ mixin _$Transaction {
   DateTime get date => throw _privateConstructorUsedError;
   int get categorysIndex => throw _privateConstructorUsedError;
   TransactionType get category => throw _privateConstructorUsedError;
+  String get cardID => throw _privateConstructorUsedError;
 
   /// Serializes this Transaction to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -52,7 +53,8 @@ abstract class $TransactionCopyWith<$Res> {
       String categoryName,
       @TimestampConverter() DateTime date,
       int categorysIndex,
-      TransactionType category});
+      TransactionType category,
+      String cardID});
 }
 
 /// @nodoc
@@ -77,6 +79,7 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
     Object? date = null,
     Object? categorysIndex = null,
     Object? category = null,
+    Object? cardID = null,
   }) {
     return _then(_value.copyWith(
       uuid: freezed == uuid
@@ -107,6 +110,10 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as TransactionType,
+      cardID: null == cardID
+          ? _value.cardID
+          : cardID // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -126,7 +133,8 @@ abstract class _$$TransactionImplCopyWith<$Res>
       String categoryName,
       @TimestampConverter() DateTime date,
       int categorysIndex,
-      TransactionType category});
+      TransactionType category,
+      String cardID});
 }
 
 /// @nodoc
@@ -149,6 +157,7 @@ class __$$TransactionImplCopyWithImpl<$Res>
     Object? date = null,
     Object? categorysIndex = null,
     Object? category = null,
+    Object? cardID = null,
   }) {
     return _then(_$TransactionImpl(
       uuid: freezed == uuid
@@ -179,6 +188,10 @@ class __$$TransactionImplCopyWithImpl<$Res>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as TransactionType,
+      cardID: null == cardID
+          ? _value.cardID
+          : cardID // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -193,7 +206,8 @@ class _$TransactionImpl implements _Transaction {
       required this.categoryName,
       @TimestampConverter() required this.date,
       required this.categorysIndex,
-      required this.category});
+      required this.category,
+      required this.cardID});
 
   factory _$TransactionImpl.fromJson(Map<String, dynamic> json) =>
       _$$TransactionImplFromJson(json);
@@ -213,10 +227,12 @@ class _$TransactionImpl implements _Transaction {
   final int categorysIndex;
   @override
   final TransactionType category;
+  @override
+  final String cardID;
 
   @override
   String toString() {
-    return 'Transaction(uuid: $uuid, userId: $userId, amount: $amount, categoryName: $categoryName, date: $date, categorysIndex: $categorysIndex, category: $category)';
+    return 'Transaction(uuid: $uuid, userId: $userId, amount: $amount, categoryName: $categoryName, date: $date, categorysIndex: $categorysIndex, category: $category, cardID: $cardID)';
   }
 
   @override
@@ -233,13 +249,14 @@ class _$TransactionImpl implements _Transaction {
             (identical(other.categorysIndex, categorysIndex) ||
                 other.categorysIndex == categorysIndex) &&
             (identical(other.category, category) ||
-                other.category == category));
+                other.category == category) &&
+            (identical(other.cardID, cardID) || other.cardID == cardID));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, uuid, userId, amount,
-      categoryName, date, categorysIndex, category);
+      categoryName, date, categorysIndex, category, cardID);
 
   /// Create a copy of Transaction
   /// with the given fields replaced by the non-null parameter values.
@@ -265,7 +282,8 @@ abstract class _Transaction implements Transaction {
       required final String categoryName,
       @TimestampConverter() required final DateTime date,
       required final int categorysIndex,
-      required final TransactionType category}) = _$TransactionImpl;
+      required final TransactionType category,
+      required final String cardID}) = _$TransactionImpl;
 
   factory _Transaction.fromJson(Map<String, dynamic> json) =
       _$TransactionImpl.fromJson;
@@ -285,6 +303,8 @@ abstract class _Transaction implements Transaction {
   int get categorysIndex;
   @override
   TransactionType get category;
+  @override
+  String get cardID;
 
   /// Create a copy of Transaction
   /// with the given fields replaced by the non-null parameter values.

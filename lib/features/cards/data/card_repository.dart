@@ -20,17 +20,26 @@ class CardRepository implements CardBaseRepository {
   @override
   Future<AppResult<void>> addCard(CardModel cardModel) async {
     // TODO: implement addCard
-    // TODO: implement addCategory
     try {
       if (isUserLoggedIn) {
+        final existingCards = await _dbFirestoreClient.getQuery(
+          collectionPath: "cards",
+          mapper: (data, documentId) => CardModel.fromJson(data!),
+        );
+
+        // Đặt thẻ đầu tiên tạo làm Defaults.
+        final updatedCard = cardModel.copyWith(
+          isDefault: existingCards.isEmpty ? true : false,
+        );
+
         await _dbFirestoreClient.setDocument(
           collectionPath: 'cards',
           merge: false,
-          documentId: cardModel.uuid!,
-          data: cardModel.toJson(),
+          documentId: updatedCard.uuid!,
+          data: updatedCard.toJson(),
         );
       }
-      debugPrint("Error: Unable to add Card to FireStore");
+      debugPrint("Success: Successfully to add Card to FireStore");
       return const AppResult.success(null);
     } catch (err) {
       debugPrint("Error when add Card to FireStore");

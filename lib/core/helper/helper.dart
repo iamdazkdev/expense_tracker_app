@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 
 import '../config/overlay_style_config.dart';
+import '../enum/categorys.dart';
 
 class Helper {
   /// Sets the system UI overlay style for navigation elements.
@@ -45,5 +46,17 @@ class Helper {
 
   static String generateUUID() {
     return const Uuid().v4();
+  }
+
+  static IconData getCategoryIconByName(String name) {
+    try {
+      return Categorys.values
+          .firstWhere(
+            (cat) => cat.name.toLowerCase().trim() == name.toLowerCase().trim(),
+          )
+          .icon;
+    } catch (_) {
+      return Categorys.others.icon;
+    }
   }
 }

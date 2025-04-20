@@ -33,21 +33,36 @@ class HeaderAppBarFilter extends StatelessWidget {
   }
 
   void _showModalSheet(BuildContext context) {
-    return Alerts.showSheet(
+    String? selectedRange;
+
+    Alerts.showSheet(
       context: context,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
-        child: Column(
-          children: [
-            const FilterForm(),
-            CustomMaterialButton(
-              text: 'Done',
-              onPressed: () {
-                context.pop();
-                context.read<StateCubit>().applyFilter();
-              },
-            ),
-          ],
+      child: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FilterForm(
+                onRangeSelected: (value) {
+                  selectedRange = value; // Cập nhật khi user chọn box
+                },
+              ),
+              CustomMaterialButton(
+                text: 'Xong',
+                onPressed: () {
+                  context.pop();
+                  context.read<StateCubit>().applyFilter();
+
+                  if (selectedRange != null) {
+                    context.read<StateCubit>().applyQuickFilter(selectedRange!);
+                  } else {
+                    context.read<StateCubit>().applyFilter();
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -20,12 +20,10 @@ CategoryModel _$CategoryModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CategoryModel {
-  String get uuid =>
-      throw _privateConstructorUsedError; // id Firestore document
-  String get name => throw _privateConstructorUsedError; // Tên hiển thị
-  String get iconName => throw _privateConstructorUsedError; // FontFamilyName
-  int get colorName =>
-      throw _privateConstructorUsedError; // Mã màu dạng int (ARGB)
+  String get uuid => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  String get iconName => throw _privateConstructorUsedError;
+  int get colorName => throw _privateConstructorUsedError;
   String? get note => throw _privateConstructorUsedError;
 
   /// Serializes this CategoryModel to a JSON map.
@@ -165,16 +163,12 @@ class _$CategoryModelImpl implements _CategoryModel {
 
   @override
   final String uuid;
-// id Firestore document
   @override
   final String name;
-// Tên hiển thị
   @override
   final String iconName;
-// FontFamilyName
   @override
   final int colorName;
-// Mã màu dạng int (ARGB)
   @override
   final String? note;
 
@@ -216,12 +210,6 @@ class _$CategoryModelImpl implements _CategoryModel {
       this,
     );
   }
-
-  @override
-  Categorys toCategorys() {
-    // TODO: implement toCategorys
-    throw UnimplementedError();
-  }
 }
 
 abstract class _CategoryModel implements CategoryModel {
@@ -236,13 +224,13 @@ abstract class _CategoryModel implements CategoryModel {
       _$CategoryModelImpl.fromJson;
 
   @override
-  String get uuid; // id Firestore document
+  String get uuid;
   @override
-  String get name; // Tên hiển thị
+  String get name;
   @override
-  String get iconName; // FontFamilyName
+  String get iconName;
   @override
-  int get colorName; // Mã màu dạng int (ARGB)
+  int get colorName;
   @override
   String? get note;
 

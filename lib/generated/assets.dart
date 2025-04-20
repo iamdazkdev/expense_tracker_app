@@ -9,6 +9,8 @@ class Assets {
   static const String fontsInterSemiBold = 'assets/fonts/Inter-SemiBold.ttf';
   static const String iconsAppIcon = 'assets/icons/app_icon.png';
   static const String iconsMainAppIcon = 'assets/icons/main_app_icon.png';
+  static const String iconsMainAppIconRemovebgPreview =
+      'assets/icons/main_app_icon-removebg-preview.png';
   static const String imagesGoogleLogo = 'assets/images/google_logo.png';
   static const String imagesGuest = 'assets/images/guest.png';
   static const String imagesProfile = 'assets/images/profile.png';

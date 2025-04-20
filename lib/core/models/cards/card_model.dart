@@ -41,6 +41,5 @@ class CardModel with _$CardModel {
 }
 
 extension CardModelColorExtension on CardModel {
-  /// Lấy lại màu sắc từ `CardModel` dưới dạng `Color`
-  Color get getColor => Color(color); // Chuyển ARGB (int) thành Color
+  Color get getColor => Color(color);
 }

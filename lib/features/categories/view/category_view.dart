@@ -1,3 +1,4 @@
+import 'package:daily_expense_tracker_app/core/helper/helper.dart';
 import 'package:daily_expense_tracker_app/core/models/categories/category_model.dart';
 import 'package:daily_expense_tracker_app/features/categories/view/widgets/category_form.dart';
 import 'package:db_firestore_client/db_firestore_client.dart';
@@ -67,27 +68,32 @@ class _CategoryViewState extends State<CategoryView> {
               );
             } else {
               List<CategoryModel> categories = snapshot.data!;
+              debugPrint("Categories length: ${categories.length}");
               return ListView.separated(
                 itemCount: categories.length,
                 itemBuilder: (builder, index) {
                   CategoryModel category = categories[index];
                   return ListTile(
-                    onTap: () {
+                    onLongPress: () {
                       showDialog(
-                          context: context,
-                          builder: (builder) => CategoryForm(
-                                category: category,
-                                isEdit: true,
-                                onSave: () {
-                                  setState(() {
-                                    // Reload data after save or delete
-                                  });
-                                },
-                              ));
+                        context: context,
+                        builder: (builder) => CategoryForm(
+                          category: category,
+                          isEdit: true,
+                          onSave: () {
+                            setState(() {
+                              // Reload data after save or delete
+                            });
+                          },
+                        ),
+                      );
                     },
                     leading: CircleAvatar(
-                      // ignore: deprecated_member_use
-                      backgroundColor: category.color.withOpacity(0.2),
+                      backgroundColor: category.color.withOpacity(0.9),
+                      child: Icon(
+                        Helper.getCategoryIconByName(category.name),
+                        color: Colors.white,
+                      ),
                     ),
                     title: Text(
                       category.name,
@@ -96,7 +102,7 @@ class _CategoryViewState extends State<CategoryView> {
                           const TextStyle(
                               fontWeight: FontWeight.w500, fontSize: 15)),
                     ),
-                    subtitle: Text(category.note!,
+                    subtitle: Text(category.note != null ? category.note! : '',
                         style: Theme.of(context).textTheme.bodySmall?.apply(
                             color: Colors.grey,
                             overflow: TextOverflow.ellipsis)),

@@ -9,10 +9,10 @@ part 'category_model.g.dart';
 @freezed
 class CategoryModel with _$CategoryModel {
   const factory CategoryModel({
-    required String uuid, // id Firestore document
-    required String name, // Tên hiển thị
-    required String iconName, // FontFamilyName
-    required int colorName, // Mã màu dạng int (ARGB)
+    required String uuid,
+    required String name,
+    required String iconName,
+    required int colorName,
     String? note,
   }) = _CategoryModel;
 
@@ -23,8 +23,8 @@ class CategoryModel with _$CategoryModel {
     return const CategoryModel(
       uuid: '',
       name: '',
-      iconName: 'bus', // Font fallback nếu null
-      colorName: 0xFFFF0000, // Default color red
+      iconName: 'bus',
+      colorName: 0xFFFF0000,
       note: null,
     );
   }
@@ -43,25 +43,30 @@ class CategoryModel with _$CategoryModel {
       note: categorys.note,
     );
   }
-
-  /// Tạo Categorys từ CategoryModel (để chuyển từ mô hình dữ liệu Firestore về enum)
-  Categorys toCategorys() {
-    return Categorys.values.firstWhere(
-      (category) => category.name == name,
-      orElse: () => Categorys.others, // Return default if not found
-    );
-  }
 }
 
 extension CategoryModelX on CategoryModel {
   /// Lấy mã màu từ ARGB thành Color
-  Color get color => Color(colorName); // Chuyển ARGB (int) thành Color
-
-  /// Lấy icon từ FontFamilyName
+  Color get color => Color(colorName);
   IconData get icon {
     return IconData(
-      int.parse(iconName), // Chuyển iconName (String) thành int (codePoint)
-      fontFamily: 'FontAwesomeSolid', // FontFamily của FontAwesome
+      int.parse(iconName),
+      fontFamily: 'FontAwesomeSolid',
     );
+  }
+}
+
+extension CategoryModelExtension on CategoryModel {
+  Categorys toCategorys() {
+    return Categorys.values.firstWhere(
+      (category) => category.name == name,
+      orElse: () => Categorys.others,
+    );
+  }
+}
+
+extension CategoryModelListExtension on List<CategoryModel> {
+  List<Categorys> toCategorysList() {
+    return map((e) => e.toCategorys()).toList();
   }
 }

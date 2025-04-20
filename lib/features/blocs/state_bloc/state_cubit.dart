@@ -47,6 +47,31 @@ class StateCubit extends Cubit<StateState> {
     }
   }
 
+  void applyQuickFilter(String range) {
+    final now = DateTime.now();
+    late DateTime fromDate;
+
+    switch (range) {
+      case '1 tuần':
+        fromDate = now.subtract(const Duration(days: 7));
+        break;
+      case '1 tháng':
+        fromDate = DateTime(now.year, now.month - 1, now.day);
+        break;
+      case '1 năm':
+        fromDate = DateTime(now.year - 1, now.month, now.day);
+        break;
+      default:
+        return;
+    }
+
+    _startDate = now;
+    _endDate = fromDate;
+
+    emit(StateState.dateChanged(_startDate, _endDate));
+    getStat(_transactionCategory);
+  }
+
   Future<void> getStat(TransactionType category) async {
     emit(const StateState.loading());
 

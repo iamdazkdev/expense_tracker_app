@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
+import 'package:daily_expense_tracker_app/core/models/cards/card_model.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/enum/enum.dart';
 import '../../../../core/extension/extension.dart';
+import '../../../core/models/categories/category_model.dart';
 import '../../../core/models/transactions/transaction_model.dart';
+import '../../../core/service/network_info.dart';
 import '../../transaction/data/repository/transaction_base_repository.dart';
 
 part 'transaction_cubit.freezed.dart';
@@ -12,36 +18,63 @@ part 'transaction_state.dart';
 
 class TransactionCubit extends Cubit<TransactionState> {
   final TransactionBaseRepository _transactionRepository;
-
-  TransactionCubit({required TransactionBaseRepository transactionRepository})
+  final NetworkBaseInfo _networkInfo;
+  TransactionCubit(
+      {required TransactionBaseRepository transactionRepository,
+      required NetworkBaseInfo networkInfo})
       : _transactionRepository = transactionRepository,
+        _networkInfo = networkInfo,
         super(const TransactionState.initial());
 
   Transaction _transaction = Transaction.empty();
   set transaction(Transaction value) => _transaction = value;
-
   bool _isEditing = false;
   set isEditing(bool value) => _isEditing = value;
   final TextEditingController _amountController = TextEditingController();
   TextEditingController get amountController => _amountController;
+  late List<CategoryModel> listCategories = [];
+  late CategoryModel? categoryModel;
+  late Categorys categorys;
 
-  void init() {
+  void init() async {
+    categorys = Categorys.values[1];
+    categoryModel = null;
     if (_isEditing) {
       _amountController.text = _transaction.amount.toCurrencyString();
     } else {
       _amountController.clear();
       _transaction = Transaction.empty();
       _transaction = _transaction.copyWith(
-          categorysIndex: Categorys.values[0].index,
-          categoryName: Categorys.values[0].name);
+          categorysIndex: categorys.index,
+          categoryName: categorys.name,
+          cardID: "d5b46602-2d15-4738-96f3-2cb3097a3444");
     }
-
     emit(_buildState());
   }
 
   void onCategorysChanged(Categorys categorys) {
-    _transaction = _transaction.copyWith(categorysIndex: categorys.index);
-    _transaction = _transaction.copyWith(categoryName: categorys.name);
+    this.categorys = categorys;
+    categoryModel = listCategories.firstWhere(
+      (e) => e.toCategorys() == categorys,
+      orElse: () => CategoryModel.empty(),
+    );
+
+    _transaction = _transaction.copyWith(
+      categorysIndex: categorys.index,
+      categoryName: categorys.name,
+    );
+
+    emit(_buildState());
+  }
+
+  void onCategoryChanged(CategoryModel category) {
+    _transaction =
+        _transaction.copyWith(categoryName: category.name, categorysIndex: 1);
+    emit(_buildState());
+  }
+
+  void onCardChanged(CardModel card) {
+    _transaction = _transaction.copyWith(cardID: card.uuid!);
     emit(_buildState());
   }
 
@@ -104,8 +137,10 @@ class TransactionCubit extends Cubit<TransactionState> {
   TransactionState _buildState() {
     return TransactionState.loadTransaction(
       categorys: Categorys.fromIndex(_transaction.categorysIndex),
+      categoryModel: categoryModel,
       transactionCategory: _transaction.category,
       transactionDate: _transaction.date,
+      cardID: _transaction.cardID,
     );
   }
 
@@ -114,5 +149,12 @@ class TransactionCubit extends Cubit<TransactionState> {
     _isEditing = false;
     _amountController.dispose();
     return super.close();
+  }
+
+  Future<List<CategoryModel>> getCachedCategoryModels() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String>? jsonList = prefs.getStringList("cached_categories");
+    if (jsonList == null) return [];
+    return jsonList.map((e) => CategoryModel.fromJson(json.decode(e))).toList();
   }
 }

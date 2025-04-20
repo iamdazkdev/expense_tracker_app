@@ -15,6 +15,7 @@ _$TransactionImpl _$$TransactionImplFromJson(Map<String, dynamic> json) =>
       date: const TimestampConverter().fromJson(json['date'] as Timestamp),
       categorysIndex: (json['categorysIndex'] as num).toInt(),
       category: $enumDecode(_$TransactionTypeEnumMap, json['category']),
+      cardID: json['cardID'] as String,
     );
 
 Map<String, dynamic> _$$TransactionImplToJson(_$TransactionImpl instance) =>
@@ -26,6 +27,7 @@ Map<String, dynamic> _$$TransactionImplToJson(_$TransactionImpl instance) =>
       'date': const TimestampConverter().toJson(instance.date),
       'categorysIndex': instance.categorysIndex,
       'category': _$TransactionTypeEnumMap[instance.category]!,
+      'cardID': instance.cardID,
     };
 
 const _$TransactionTypeEnumMap = {

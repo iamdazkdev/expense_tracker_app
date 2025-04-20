@@ -1,10 +1,15 @@
+import 'dart:convert';
+
+import 'package:daily_expense_tracker_app/core/models/cards/card_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/enum/enum.dart';
 import '../../../../core/extension/extension.dart';
+import '../../../../core/models/categories/category_model.dart';
 import '../../../../core/router/router.dart';
 import '../../../../core/shared/shared.dart';
 import '../../../../core/utils/alerts/alerts.dart';
@@ -18,10 +23,32 @@ class TransactionForm extends StatefulWidget {
 }
 
 class _TransactionFormState extends State<TransactionForm> {
+  late List<CategoryModel> listCategories = [];
+  late List<CardModel> listCards = [];
   @override
   void initState() {
-    context.read<TransactionCubit>().init();
     super.initState();
+    initAsync();
+  }
+
+  Future<void> initAsync() async {
+    context.read<TransactionCubit>().init();
+    listCategories = await getCachedCategoryModels();
+    listCards = await getCachedCardModels();
+  }
+
+  Future<List<CategoryModel>> getCachedCategoryModels() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String>? jsonList = prefs.getStringList("cached_categories");
+    if (jsonList == null) return [];
+    return jsonList.map((e) => CategoryModel.fromJson(json.decode(e))).toList();
+  }
+
+  Future<List<CardModel>> getCachedCardModels() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String>? jsonList = prefs.getStringList("cached_cards");
+    if (jsonList == null) return [];
+    return jsonList.map((e) => CardModel.fromJson(json.decode(e))).toList();
   }
 
   @override
@@ -38,7 +65,6 @@ class _TransactionFormState extends State<TransactionForm> {
         final categorys = state.mapOrNull(
           loadTransaction: (state) => state.categorys,
         );
-
         final transactionCategory = state.mapOrNull(
           loadTransaction: (state) => state.transactionCategory,
         );
@@ -46,6 +72,21 @@ class _TransactionFormState extends State<TransactionForm> {
         final transactionDate = state.mapOrNull(
           loadTransaction: (state) => state.transactionDate,
         );
+
+        final cardID = state.mapOrNull(
+          loadTransaction: (state) => state.cardID,
+        );
+        final selectedCard = listCards.firstWhere(
+          (card) => card.uuid == cardID,
+          orElse: () => CardModel(
+              name: 'Loại thẻ', holderName: '', accountNumber: '', color: 12),
+        );
+        Categorys? getCategoryByName(String name) {
+          return Categorys.values.firstWhere(
+            (e) => e.name.toLowerCase().trim() == name.toLowerCase().trim(),
+            orElse: () => Categorys.others,
+          );
+        }
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -78,6 +119,27 @@ class _TransactionFormState extends State<TransactionForm> {
                   backgroundItem: backgroundItem,
                   icon: transactionCategory.icon,
                   onPressed: () => _showModalSheetTransactionCategory(context),
+                ),
+                CustomItemButton(
+                  text: listCards
+                      .firstWhere(
+                        (card) => card.uuid == cardID,
+                        orElse: () => CardModel(
+                            name: 'Loại thẻ',
+                            holderName: '',
+                            accountNumber: '',
+                            color: 123),
+                      )
+                      .name,
+                  padding: padding,
+                  iconSize: iconSize,
+                  iconColor: Colors.white,
+                  iconItemWidth: iconItemWidth,
+                  iconItemHeight: iconItemHeight,
+                  backgroundIcon: Colors.blue,
+                  backgroundItem: backgroundItem,
+                  icon: FontAwesomeIcons.simCard,
+                  onPressed: () => _showModalSheetTransactionCards(context),
                 ),
                 CustomItemButton(
                   text: transactionDate!.formattedDateOnly,
@@ -127,13 +189,6 @@ class _TransactionFormState extends State<TransactionForm> {
               controller: context.read<TransactionCubit>().amountController,
               prefixText: NumberFormat.compactSimpleCurrency(locale: 'en')
                   .currencySymbol,
-              /*  validator: (value) {
-                final amount = value?.toUnformattedString().toDouble() ?? 0.0;
-                if (amount <= 0) {
-                  return 'Số tiền không hợp lệ';
-                }
-                return null;
-              },*/
             ),
           )
         ],
@@ -142,28 +197,38 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   void _showModalSheetCategory(BuildContext context) {
+    // Hàm tìm Categorys từ tên
+    Categorys? getCategoryByName(String name) {
+      return Categorys.values.firstWhere(
+        (e) => e.name.toLowerCase().trim() == name.toLowerCase().trim(),
+        orElse: () => Categorys.others,
+      );
+    }
+
     Alerts.showSheet(
       context: context,
       child: Expanded(
         child: ListView.builder(
           scrollDirection: Axis.vertical,
-          itemCount: categorys.length,
+          itemCount: listCategories.length,
           itemBuilder: (context, index) {
-            final Categorys category = categorys[index];
+            CategoryModel category = listCategories[index];
+            final matchedEnum = getCategoryByName(category.name);
+
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: CustomItemButton(
                 text: category.name,
-                icon: category.icon,
+                icon: matchedEnum!.icon,
                 iconColor: Colors.white,
                 backgroundItem: Colors.transparent,
-                backgroundIcon: category.backgroundColorIcon,
+                backgroundIcon: matchedEnum.backgroundColorIcon,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
                   vertical: 10,
                 ),
                 onPressed: () {
-                  context.read<TransactionCubit>().onCategorysChanged(category);
+                  context.read<TransactionCubit>().onCategoryChanged(category);
                   context.pop();
                 },
               ),
@@ -203,6 +268,46 @@ class _TransactionFormState extends State<TransactionForm> {
               ),
             );
           }).toList(),
+        ),
+      ),
+    );
+  }
+
+  void _showModalSheetTransactionCards(BuildContext context) {
+    Alerts.showSheet(
+      context: context,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 25.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+              child: Text(
+                "Chọn thẻ giao dịch",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
+            ...listCards.map(
+              (card) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: CustomItemButton(
+                  text: card.name,
+                  iconColor: Colors.white,
+                  icon: FontAwesomeIcons.wallet,
+                  backgroundIcon: card.getColor.withOpacity(0.7),
+                  backgroundItem: Colors.transparent,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  onPressed: () {
+                    /// Gọi xử lý khi chọn thẻ, ví dụ:
+                    context.read<TransactionCubit>().onCardChanged(card);
+                    context.pop(); // đóng modal sau khi chọn
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

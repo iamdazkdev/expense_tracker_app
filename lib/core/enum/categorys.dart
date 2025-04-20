@@ -2,36 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 enum Categorys {
-  food(
-    name: 'Ăn uống',
-    icon: FontAwesomeIcons.utensils,
-    backgroundColorIcon: Colors.red,
-    note: 'Chi phí cho ăn uống hàng ngày',
-  ),
-  transport(
-    name: 'Di chuyển',
-    icon: FontAwesomeIcons.bus,
-    backgroundColorIcon: Colors.blue,
-    note: 'Đi lại, xăng xe, phương tiện công cộng',
-  ),
-  others(
-    name: 'Khác',
-    icon: FontAwesomeIcons.ellipsis,
-    backgroundColorIcon: Colors.yellow,
-    note: "Vui lòng thêm 1 cái khác",
-  ),
-/*  shopping(
+  shopping(
     name: 'Mua sắm',
     icon: FontAwesomeIcons.cartShopping,
     backgroundColorIcon: Colors.green,
     note: 'Mua đồ dùng cá nhân hoặc gia đình',
   ),
-  others(
-    name: 'Khác',
-    icon: FontAwesomeIcons.ellipsis,
-    backgroundColorIcon: Colors.yellow,
-    note: null,
-  ),s
   personal(
     name: 'Cá nhân',
     icon: FontAwesomeIcons.user,
@@ -241,13 +217,30 @@ enum Categorys {
     icon: FontAwesomeIcons.gamepad,
     backgroundColorIcon: Colors.cyanAccent,
     note: 'Mua game, đồ chơi game',
-  );*/
-  ;
+  ),
+  food(
+    name: 'Ăn uống',
+    icon: FontAwesomeIcons.utensils,
+    backgroundColorIcon: Colors.red,
+    note: 'Chi phí cho ăn uống hàng ngày',
+  ),
+  transport(
+    name: 'Di chuyển',
+    icon: FontAwesomeIcons.bus,
+    backgroundColorIcon: Colors.blue,
+    note: 'Đi lại, xăng xe, phương tiện công cộng',
+  ),
+  others(
+    name: 'Khác',
+    icon: FontAwesomeIcons.ellipsis,
+    backgroundColorIcon: Colors.yellow,
+    note: "Vui lòng thêm 1 cái khác",
+  );
 
   final String name;
   final IconData icon;
   final Color backgroundColorIcon;
-  final String? note; // <- thêm note nullable vào đây
+  final String? note;
 
   const Categorys({
     required this.name,
@@ -280,4 +273,4 @@ enum Categorys {
   }
 }
 
-const List<Categorys> categorys = Categorys.values;
+List<Categorys> categorys = Categorys.values;

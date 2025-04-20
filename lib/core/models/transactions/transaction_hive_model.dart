@@ -25,14 +25,18 @@ class TransactionHive extends HiveObject {
   @HiveField(6)
   String categoryName;
 
-  TransactionHive(
-      {required this.uuid,
-      required this.userId,
-      required this.date,
-      required this.amount,
-      required this.categorysIndex,
-      required this.category,
-      required this.categoryName});
+  @HiveField(7)
+  String cardID;
+  TransactionHive({
+    required this.uuid,
+    required this.userId,
+    required this.date,
+    required this.amount,
+    required this.categorysIndex,
+    required this.category,
+    required this.categoryName,
+    required this.cardID,
+  });
 }
 
 @HiveType(typeId: 1)

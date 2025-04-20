@@ -17,6 +17,7 @@ class Transaction with _$Transaction {
     @TimestampConverter() required DateTime date,
     required int categorysIndex,
     required TransactionType category,
+    required String cardID,
   }) = _Transaction;
 
   factory Transaction.fromJson(Map<String, dynamic> json) =>
@@ -24,14 +25,14 @@ class Transaction with _$Transaction {
 
   factory Transaction.empty() {
     return Transaction(
-      uuid: '',
-      userId: '',
-      amount: 0.0,
-      date: DateTime.now(),
-      categorysIndex: 0,
-      category: TransactionType.expense,
-      categoryName: '',
-    );
+        uuid: '',
+        userId: '',
+        amount: 0.0,
+        date: DateTime.now(),
+        categorysIndex: 0,
+        category: TransactionType.expense,
+        categoryName: '',
+        cardID: '');
   }
 
   factory Transaction.fromHiveModel(TransactionHive transactionHive) {
@@ -45,6 +46,8 @@ class Transaction with _$Transaction {
           ? TransactionType.expense
           : TransactionType.income,
       categoryName: transactionHive.categoryName,
+      //    cardID: transactionHive.cardID,
+      cardID: transactionHive.cardID,
     );
   }
 }
@@ -62,23 +65,23 @@ class TimestampConverter implements JsonConverter<DateTime, Timestamp> {
 extension TransactionTotalsExtension on List<Transaction> {
   Transaction toCalcTotals() {
     return Transaction(
-      uuid: '',
-      userId: '',
-      amount: fold(
-        0,
-        (previousValue, element) {
-          if (element.category == TransactionType.expense) {
-            return previousValue - element.amount;
-          } else {
-            return previousValue + element.amount;
-          }
-        },
-      ),
-      date: DateTime.now(),
-      categorysIndex: 0,
-      category: TransactionType.expense,
-      categoryName: '',
-    );
+        uuid: '',
+        userId: '',
+        amount: fold(
+          0,
+          (previousValue, element) {
+            if (element.category == TransactionType.expense) {
+              return previousValue - element.amount;
+            } else {
+              return previousValue + element.amount;
+            }
+          },
+        ),
+        date: DateTime.now(),
+        categorysIndex: 0,
+        category: TransactionType.expense,
+        categoryName: '',
+        cardID: "1");
   }
 }
 
@@ -94,6 +97,7 @@ extension TransactionExtension on Transaction {
           ? CategoryHive.expense
           : CategoryHive.income,
       categoryName: categoryName,
+      cardID: cardID,
     );
   }
 }

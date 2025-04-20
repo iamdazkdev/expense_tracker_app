@@ -91,7 +91,8 @@ Future<void> initAppConfig() async {
 
   //TransactionBloc && TransactionRepository
   getIt.registerLazySingleton(() => transactionRepository);
-  getIt.registerFactory(() => TransactionCubit(transactionRepository: getIt()));
+  getIt.registerFactory(() =>
+      TransactionCubit(transactionRepository: getIt(), networkInfo: getIt()));
 
   //=>
   //AuthProfileBaseRepository (AuthProfileRepository)
