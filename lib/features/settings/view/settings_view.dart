@@ -1,5 +1,4 @@
 import 'package:daily_expense_tracker_app/core/router/app_route.dart';
-import 'package:daily_expense_tracker_app/core/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -82,13 +81,13 @@ class _SettingsViewState extends State<SettingsView> {
                 trailing: const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
                 onTap: () => Navigator.pushNamed(context, RoutesName.cards),
               ),
-              ItemSettings(
+              /*ItemSettings(
                 title: 'Thống kê chi tiêu',
                 iconData: FontAwesomeIcons.chartLine,
                 backgroundIcon: Colors.blueAccent,
                 trailing: const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
                 onTap: () => context.pushNamed(RoutesName.statisticals),
-              ),
+              ),*/
             ],
             ItemSettings(
               title: 'Phiên bản',
