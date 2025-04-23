@@ -1,14 +1,13 @@
 import 'package:auth_user/auth_user.dart';
-import 'package:daily_expense_tracker_app/core/extension/extension.dart';
 import 'package:daily_expense_tracker_app/core/models/cards/card_model.dart';
+import 'package:daily_expense_tracker_app/features/cards/view/widgets/card_display_widget.dart';
 import 'package:daily_expense_tracker_app/features/cards/view/widgets/card_form.dart';
 import 'package:daily_expense_tracker_app/features/cards/view/widgets/confirm_model_widget.dart';
-import 'package:daily_expense_tracker_app/features/cards/view/widgets/currency_text_widget.dart';
 import 'package:db_firestore_client/db_firestore_client.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../core/enum/colors.dart';
+import '../../../core/shared/custom_app_bar.dart';
 import '../data/card_base_repository.dart';
 import '../data/card_repository.dart';
 
@@ -27,6 +26,8 @@ class _CardViewState extends State<CardView> {
     try {
       final result = await _dbFirestoreClient.getQueryOrderBy(
         collectionPath: "cards",
+        field: "userId",
+        isEqualTo: AuthUser().currentUser!.uid,
         mapper: (data, documentId) => CardModel.fromJson(data!),
         orderByField: "name",
       );
@@ -56,12 +57,7 @@ class _CardViewState extends State<CardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Quản lý thẻ",
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-        ),
-      ),
+      appBar: const CustomAppBar(title: 'Quản lý thẻ'),
       body: RefreshIndicator(
         onRefresh: () async {
           setState(() {});
@@ -92,151 +88,16 @@ class _CardViewState extends State<CardView> {
                   itemBuilder: (builder, index) {
                     CardModel card = listCards[index];
                     debugPrint("Card Number: ${card.accountNumber}");
-                    return GestureDetector(
-                      onLongPress: () {
-                        showDialog(
-                          context: context,
-                          builder: (builder) => CardForm(
-                            isEdit: true,
-                            card: card,
-                            onSave: () {
-                              setState(() {});
-                            },
-                          ),
-                        );
-                      },
-                      child: Stack(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 20),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 20),
-                            decoration: BoxDecoration(
-                              color: card.getColor.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(18),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          card.holderName.isEmpty
-                                              ? "---"
-                                              : card.holderName,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 18),
-                                        ),
-                                        Text(
-                                          card.name,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall,
-                                        ),
-                                        Text(
-                                          card.accountNumber.isEmpty
-                                              ? "---"
-                                              : card.accountNumber
-                                                  .maskAccount(),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall,
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(height: 20),
-                                const Text(
-                                  "Tổng số dư",
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                CurrencyText(
-                                  card.balance ?? 0,
-                                  style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                                const SizedBox(height: 10),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "Thu nhập",
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          CurrencyText(
-                                            card.income ?? 0,
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w700,
-                                                color: ThemeColors.success),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "Chi tiêu",
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          CurrencyText(
-                                            card.expense ?? 0,
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w700,
-                                                color: ThemeColors.error),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                          Positioned(
-                            right: 15,
-                            bottom: 40,
-                            child: Icon(
-                              FontAwesomeIcons.wallet,
-                              size: 20,
-                              color: card.getColor,
-                            ),
-                          ),
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: IconButton(
-                              onPressed: () {
-                                _showOptions(context, card);
-                              },
-                              icon: const Icon(
-                                Icons.wallet,
-                                size: 20,
-                              ),
-                            ),
-                          )
-                        ],
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: CardDisplayWidget(
+                        card: card,
+                        onCardSelect: () {
+                          setState(() {});
+                        },
+                        onCardOptions: () {
+                          //_showOptions(context, card);
+                        },
                       ),
                     );
                   },

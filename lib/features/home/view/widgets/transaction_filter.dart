@@ -33,7 +33,7 @@ class _TransactionFilterState extends State<TransactionFilter> {
         children: [
           const SummaryCard(),
           const SizedBox(height: 10),
-          _buidlHeaderText(context),
+          _buildHeaderText(context),
           const SizedBox(height: 10),
           Expanded(
             child: Column(
@@ -47,7 +47,7 @@ class _TransactionFilterState extends State<TransactionFilter> {
     );
   }
 
-  _buidlHeaderText(BuildContext context) {
+  _buildHeaderText(BuildContext context) {
     return BlocBuilder<StateCubit, StateState>(
       builder: (context, state) {
         final List<Transaction>? allTransactions = state.mapOrNull(

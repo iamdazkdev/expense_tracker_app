@@ -15,6 +15,8 @@ class CardRepository implements CardBaseRepository {
   })  : _dbFirestoreClient = dbFirestoreClient,
         _authUser = authUser;
 
+  /// The [isUserLoggedIn] method is used to check if the user is logged in.
+  /// If the user is logged in, it returns true.
   bool get isUserLoggedIn => _authUser.currentUser != null;
 
   @override
@@ -24,6 +26,8 @@ class CardRepository implements CardBaseRepository {
       if (isUserLoggedIn) {
         final existingCards = await _dbFirestoreClient.getQuery(
           collectionPath: "cards",
+          field: "userId",
+          isEqualTo: _authUser.currentUser!.uid,
           mapper: (data, documentId) => CardModel.fromJson(data!),
         );
 
@@ -43,6 +47,22 @@ class CardRepository implements CardBaseRepository {
       return const AppResult.success(null);
     } catch (err) {
       debugPrint("Error when add Card to FireStore");
+      return AppResult.failure(err.toString());
+    }
+  }
+
+  @override
+  Future<AppResult<void>> updateCard(CardModel cardModel) async {
+    // TODO: implement updateCard
+    try {
+      if (isUserLoggedIn) {
+        await _dbFirestoreClient.updateDocument(
+          collectionPath: 'cards/${cardModel.uuid}',
+          data: cardModel.toJson(),
+        );
+      }
+      return const AppResult.success(null);
+    } catch (err) {
       return AppResult.failure(err.toString());
     }
   }
@@ -68,25 +88,11 @@ class CardRepository implements CardBaseRepository {
     try {
       await _dbFirestoreClient.getQueryOrderBy(
         collectionPath: "cards",
+        field: "userId",
+        isEqualTo: _authUser.currentUser!.uid,
         mapper: (data, documentId) => CardModel.fromJson(data!),
         orderByField: "name",
       );
-      return const AppResult.success(null);
-    } catch (err) {
-      return AppResult.failure(err.toString());
-    }
-  }
-
-  @override
-  Future<AppResult<void>> updateCard(CardModel cardModel) async {
-    // TODO: implement updateCard
-    try {
-      if (isUserLoggedIn) {
-        await _dbFirestoreClient.updateDocument(
-          collectionPath: 'cards/${cardModel.uuid}',
-          data: cardModel.toJson(),
-        );
-      }
       return const AppResult.success(null);
     } catch (err) {
       return AppResult.failure(err.toString());

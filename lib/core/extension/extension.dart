@@ -175,3 +175,17 @@ extension MaskAccountExtension on String {
     return generated;
   }
 }
+
+extension CurrencyFormatter on num {
+  String toCurrencyWithSymbol({String symbol = '₫'}) {
+    final format = NumberFormat.currency(locale: 'vi_VN', symbol: '');
+    return '${format.format(this)} $symbol';
+  }
+}
+
+extension CurrencyParser on String {
+  double toDoubleFromCurrency() {
+    String cleanValue = replaceAll('.', '').replaceAll(',', '');
+    return double.tryParse(cleanValue) ?? 0.0;
+  }
+}

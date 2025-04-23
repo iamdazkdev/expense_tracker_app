@@ -1,14 +1,17 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:auth_user/auth_user.dart';
 import 'package:daily_expense_tracker_app/core/models/cards/card_model.dart';
+import 'package:daily_expense_tracker_app/features/cards/data/card_repository.dart';
+import 'package:daily_expense_tracker_app/features/notifications/data/notification_service.dart';
 import 'package:db_firestore_client/db_firestore_client.dart';
 import 'package:db_hive_client/db_hive_client.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/enum/categorys.dart';
+import '../../../../core/helper/notification_helper.dart';
+import '../../../../core/helper/shared_prefs_storage.dart';
 import '../../../../core/models/categories/category_model.dart';
 import '../../../../core/models/transactions/totals_transaction_model.dart';
 import '../../../../core/models/transactions/transaction_hive_model.dart';
@@ -22,7 +25,7 @@ class MainRepository implements MainBaseRepository {
   final DbHiveClientBase _dbHiveClient;
   final AuthUserBase _authUser;
   late CategoryRepository _categoryRepository;
-
+  late CardRepository _cardRepository;
   MainRepository({
     required DbFirestoreClientBase dbFirestoreClient,
     required DbHiveClientBase dbHiveClient,
@@ -33,6 +36,8 @@ class MainRepository implements MainBaseRepository {
 
   String get _currentUser => _authUser.currentUser!.uid;
   bool get _isUserLoggedIn => _authUser.currentUser != null;
+  late Timer timer;
+  bool isTimerInitialized = false;
 
   @override
   Future<AppResult<List<Transaction>>> getAll({
@@ -43,6 +48,11 @@ class MainRepository implements MainBaseRepository {
       authUser: AuthUser(),
       dbHiveClient: DbHiveClient(),
     );
+    _cardRepository = CardRepository(
+      dbFirestoreClient: _dbFirestoreClient,
+      authUser: authUser,
+    );
+
     if (!_isUserLoggedIn) {
       final hiveTransactions = await _getHiveTransactions();
       final transactions = hiveTransactions
@@ -54,9 +64,31 @@ class MainRepository implements MainBaseRepository {
 
     final transactions = await _getDataAndClearHive();
     final result = await _updateFirestoreAndGetData(transactions, limit);
-    // final success = await addAllCategories();
-    _initCategories();
     loadAndCacheData();
+    // Chỉ thiết lập Timer nếu chưa khởi tạo hôm nay
+    if (!isTimerInitialized) {
+      final now = DateTime.now();
+      final storedDate = await SharedPrefsStorage.getStoredDateForTimer();
+
+      // nếu chưa lưu hoặc khác ngày thì khởi tạo
+      if (storedDate == null || !_isSameDay(now, storedDate)) {
+        isTimerInitialized = true;
+
+        // Lưu ngày hôm nay
+        await SharedPrefsStorage.storeDateForTimer(now);
+
+        // Tạo Timer định kỳ 4 giờ
+        timer = Timer.periodic(const Duration(hours: 4), (timer) {
+          debugPrint("🕰️ Timer đã được kích hoạt và đang chạy.");
+          NotificationHelper(
+            dbFirestoreClient: _dbFirestoreClient,
+            notificationService: NotificationService(),
+            cardRepository: _cardRepository,
+          ).checkLimitNotificationsForAllCards();
+        });
+      }
+    }
+
     return AppResult.success(result);
   }
 
@@ -64,14 +96,11 @@ class MainRepository implements MainBaseRepository {
     await loadAndCacheDataFromFirebase();
   }
 
-  void _initCategories() async {
-    final result = await addAllCategories();
-    if (result) {
-      debugPrint("🎉 Đã xử lý xong addAllCategories");
-    } else {
-      debugPrint("⚠️ Có lỗi xảy ra khi gọi addAllCategories");
-    }
-    deleteDuplicateCategories();
+  // Kiểm tra ngày có phải cùng ngày hay không
+  bool _isSameDay(DateTime now, DateTime storedDate) {
+    return now.year == storedDate.year &&
+        now.month == storedDate.month &&
+        now.day == storedDate.day;
   }
 
   @override
@@ -210,13 +239,10 @@ class MainRepository implements MainBaseRepository {
 
     int totalDeleted = 0;
 
-    // Duyệt qua từng nhóm, nếu có nhiều hơn 1 thì giữ lại 1, xoá các cái còn lại
     for (final entry in groupedByName.entries) {
       final duplicates = entry.value;
 
       if (duplicates.length > 1) {
-        // Giữ lại bản đầu tiên
-        final toKeep = duplicates.first;
         final toDelete = duplicates.sublist(1);
 
         for (final category in toDelete) {
@@ -228,7 +254,6 @@ class MainRepository implements MainBaseRepository {
         }
       }
     }
-
     debugPrint("✅ Xoá trùng xong, tổng cộng đã xoá $totalDeleted categories.");
   }
 
@@ -249,6 +274,8 @@ class MainRepository implements MainBaseRepository {
     try {
       final result = await _dbFirestoreClient.getQueryOrderBy(
         collectionPath: "cards",
+        field: "userId",
+        isEqualTo: AuthUser().currentUser!.uid,
         mapper: (data, documentId) => CardModel.fromJson(data!),
         orderByField: "name",
       );
@@ -263,50 +290,26 @@ class MainRepository implements MainBaseRepository {
       // Tải & cache categories
       final categories = await getCategoriesFromFireStore();
       if (categories.isNotEmpty) {
-        await cacheCategoryModels(categories);
+        await SharedPrefsStorage.cacheCategoryModels(categories);
         debugPrint("✅ Cached ${categories.length} categories");
       } else {
-        debugPrint("⚠️ No categories fetched from Firestore");
+        // Clear cache nếu categories rỗng
+        await SharedPrefsStorage.clearCategoryModels();
+        debugPrint(
+            "⚠️ No categories fetched from Firestore. Cleared cached categories.");
       }
-
       // Tải & cache cards
       final cards = await getCardsFromFireStore();
       if (cards.isNotEmpty) {
-        await cacheCardModels(cards);
+        await SharedPrefsStorage.cacheCardModels(cards);
         debugPrint("✅ Cached ${cards.length} cards");
       } else {
-        debugPrint("⚠️ No cards fetched from Firestore");
+        // Clear cache nếu cards rỗng
+        await SharedPrefsStorage.clearCardModels();
+        debugPrint("⚠️ No cards fetched from Firestore. Cleared cached cards.");
       }
     } catch (e) {
       debugPrint('❌ Error loading data from Firestore: $e');
     }
-  }
-
-  Future<void> cacheCategoryModels(List<CategoryModel> categories) async {
-    final prefs = await SharedPreferences.getInstance();
-    final List<String> categoryJsonList =
-        categories.map((e) => json.encode(e.toJson())).toList();
-    await prefs.setStringList("cached_categories", categoryJsonList);
-  }
-
-  Future<void> cacheCardModels(List<CardModel> cards) async {
-    final prefs = await SharedPreferences.getInstance();
-    final List<String> cardJsonList =
-        cards.map((e) => json.encode(e.toJson())).toList();
-    await prefs.setStringList("cached_cards", cardJsonList);
-  }
-
-  Future<List<CardModel>> getCachedCardModels() async {
-    final prefs = await SharedPreferences.getInstance();
-    final List<String>? jsonList = prefs.getStringList("cached_cards");
-    if (jsonList == null) return [];
-    return jsonList.map((e) => CardModel.fromJson(json.decode(e))).toList();
-  }
-
-  Future<List<CategoryModel>> getCachedCategoryModels() async {
-    final prefs = await SharedPreferences.getInstance();
-    final List<String>? jsonList = prefs.getStringList("cached_categories");
-    if (jsonList == null) return [];
-    return jsonList.map((e) => CategoryModel.fromJson(json.decode(e))).toList();
   }
 }

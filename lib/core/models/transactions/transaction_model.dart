@@ -46,8 +46,21 @@ class Transaction with _$Transaction {
           ? TransactionType.expense
           : TransactionType.income,
       categoryName: transactionHive.categoryName,
-      //    cardID: transactionHive.cardID,
       cardID: transactionHive.cardID,
+    );
+  }
+  factory Transaction.fromMap(Map<String, dynamic> data, String id) {
+    return Transaction(
+      uuid: id,
+      userId: data['userId'] as String?,
+      amount: (data['amount'] as num).toDouble(),
+      categoryName: data['categoryName'] as String,
+      date: (data['date'] as Timestamp).toDate(),
+      categorysIndex: data['categorysIndex'] as int,
+      category: (data['category'] as String) == 'expense'
+          ? TransactionType.expense
+          : TransactionType.income,
+      cardID: data['cardID'] as String,
     );
   }
 }

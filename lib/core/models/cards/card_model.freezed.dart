@@ -21,15 +21,22 @@ CardModel _$CardModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$CardModel {
   String? get uuid => throw _privateConstructorUsedError;
+  String? get userId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get holderName => throw _privateConstructorUsedError;
-  String get accountNumber =>
-      throw _privateConstructorUsedError; //required IconData icon,
+  String get accountNumber => throw _privateConstructorUsedError;
   int get color => throw _privateConstructorUsedError;
   bool? get isDefault => throw _privateConstructorUsedError;
   double? get balance => throw _privateConstructorUsedError;
   double? get income => throw _privateConstructorUsedError;
-  double? get expense => throw _privateConstructorUsedError;
+  double? get expense =>
+      throw _privateConstructorUsedError; // 🔔 Hạn mức chi tiêu được đặt cho thẻ
+  double? get spendingLimit =>
+      throw _privateConstructorUsedError; // ⏰ Bật tắt nhắc nhở khi vượt hạn mức
+  bool? get isLimitReminderEnabled =>
+      throw _privateConstructorUsedError; // 📅 Thời điểm lần cuối gửi cảnh báo (giúp tránh spam thông báo)
+  DateTime? get lastLimitReminderSent => throw _privateConstructorUsedError;
+  TransactionType? get transactionType => throw _privateConstructorUsedError;
 
   /// Serializes this CardModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -48,6 +55,7 @@ abstract class $CardModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String? uuid,
+      String? userId,
       String name,
       String holderName,
       String accountNumber,
@@ -55,7 +63,11 @@ abstract class $CardModelCopyWith<$Res> {
       bool? isDefault,
       double? balance,
       double? income,
-      double? expense});
+      double? expense,
+      double? spendingLimit,
+      bool? isLimitReminderEnabled,
+      DateTime? lastLimitReminderSent,
+      TransactionType? transactionType});
 }
 
 /// @nodoc
@@ -74,6 +86,7 @@ class _$CardModelCopyWithImpl<$Res, $Val extends CardModel>
   @override
   $Res call({
     Object? uuid = freezed,
+    Object? userId = freezed,
     Object? name = null,
     Object? holderName = null,
     Object? accountNumber = null,
@@ -82,11 +95,19 @@ class _$CardModelCopyWithImpl<$Res, $Val extends CardModel>
     Object? balance = freezed,
     Object? income = freezed,
     Object? expense = freezed,
+    Object? spendingLimit = freezed,
+    Object? isLimitReminderEnabled = freezed,
+    Object? lastLimitReminderSent = freezed,
+    Object? transactionType = freezed,
   }) {
     return _then(_value.copyWith(
       uuid: freezed == uuid
           ? _value.uuid
           : uuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      userId: freezed == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
               as String?,
       name: null == name
           ? _value.name
@@ -120,6 +141,22 @@ class _$CardModelCopyWithImpl<$Res, $Val extends CardModel>
           ? _value.expense
           : expense // ignore: cast_nullable_to_non_nullable
               as double?,
+      spendingLimit: freezed == spendingLimit
+          ? _value.spendingLimit
+          : spendingLimit // ignore: cast_nullable_to_non_nullable
+              as double?,
+      isLimitReminderEnabled: freezed == isLimitReminderEnabled
+          ? _value.isLimitReminderEnabled
+          : isLimitReminderEnabled // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      lastLimitReminderSent: freezed == lastLimitReminderSent
+          ? _value.lastLimitReminderSent
+          : lastLimitReminderSent // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      transactionType: freezed == transactionType
+          ? _value.transactionType
+          : transactionType // ignore: cast_nullable_to_non_nullable
+              as TransactionType?,
     ) as $Val);
   }
 }
@@ -134,6 +171,7 @@ abstract class _$$CardModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String? uuid,
+      String? userId,
       String name,
       String holderName,
       String accountNumber,
@@ -141,7 +179,11 @@ abstract class _$$CardModelImplCopyWith<$Res>
       bool? isDefault,
       double? balance,
       double? income,
-      double? expense});
+      double? expense,
+      double? spendingLimit,
+      bool? isLimitReminderEnabled,
+      DateTime? lastLimitReminderSent,
+      TransactionType? transactionType});
 }
 
 /// @nodoc
@@ -158,6 +200,7 @@ class __$$CardModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? uuid = freezed,
+    Object? userId = freezed,
     Object? name = null,
     Object? holderName = null,
     Object? accountNumber = null,
@@ -166,11 +209,19 @@ class __$$CardModelImplCopyWithImpl<$Res>
     Object? balance = freezed,
     Object? income = freezed,
     Object? expense = freezed,
+    Object? spendingLimit = freezed,
+    Object? isLimitReminderEnabled = freezed,
+    Object? lastLimitReminderSent = freezed,
+    Object? transactionType = freezed,
   }) {
     return _then(_$CardModelImpl(
       uuid: freezed == uuid
           ? _value.uuid
           : uuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      userId: freezed == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
               as String?,
       name: null == name
           ? _value.name
@@ -204,6 +255,22 @@ class __$$CardModelImplCopyWithImpl<$Res>
           ? _value.expense
           : expense // ignore: cast_nullable_to_non_nullable
               as double?,
+      spendingLimit: freezed == spendingLimit
+          ? _value.spendingLimit
+          : spendingLimit // ignore: cast_nullable_to_non_nullable
+              as double?,
+      isLimitReminderEnabled: freezed == isLimitReminderEnabled
+          ? _value.isLimitReminderEnabled
+          : isLimitReminderEnabled // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      lastLimitReminderSent: freezed == lastLimitReminderSent
+          ? _value.lastLimitReminderSent
+          : lastLimitReminderSent // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      transactionType: freezed == transactionType
+          ? _value.transactionType
+          : transactionType // ignore: cast_nullable_to_non_nullable
+              as TransactionType?,
     ));
   }
 }
@@ -212,7 +279,8 @@ class __$$CardModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CardModelImpl implements _CardModel {
   const _$CardModelImpl(
-      {this.uuid,
+      {required this.uuid,
+      required this.userId,
       required this.name,
       required this.holderName,
       required this.accountNumber,
@@ -220,7 +288,11 @@ class _$CardModelImpl implements _CardModel {
       this.isDefault,
       this.balance,
       this.income,
-      this.expense});
+      this.expense,
+      this.spendingLimit,
+      this.isLimitReminderEnabled,
+      this.lastLimitReminderSent,
+      this.transactionType});
 
   factory _$CardModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$CardModelImplFromJson(json);
@@ -228,12 +300,13 @@ class _$CardModelImpl implements _CardModel {
   @override
   final String? uuid;
   @override
+  final String? userId;
+  @override
   final String name;
   @override
   final String holderName;
   @override
   final String accountNumber;
-//required IconData icon,
   @override
   final int color;
   @override
@@ -244,10 +317,21 @@ class _$CardModelImpl implements _CardModel {
   final double? income;
   @override
   final double? expense;
+// 🔔 Hạn mức chi tiêu được đặt cho thẻ
+  @override
+  final double? spendingLimit;
+// ⏰ Bật tắt nhắc nhở khi vượt hạn mức
+  @override
+  final bool? isLimitReminderEnabled;
+// 📅 Thời điểm lần cuối gửi cảnh báo (giúp tránh spam thông báo)
+  @override
+  final DateTime? lastLimitReminderSent;
+  @override
+  final TransactionType? transactionType;
 
   @override
   String toString() {
-    return 'CardModel(uuid: $uuid, name: $name, holderName: $holderName, accountNumber: $accountNumber, color: $color, isDefault: $isDefault, balance: $balance, income: $income, expense: $expense)';
+    return 'CardModel(uuid: $uuid, userId: $userId, name: $name, holderName: $holderName, accountNumber: $accountNumber, color: $color, isDefault: $isDefault, balance: $balance, income: $income, expense: $expense, spendingLimit: $spendingLimit, isLimitReminderEnabled: $isLimitReminderEnabled, lastLimitReminderSent: $lastLimitReminderSent, transactionType: $transactionType)';
   }
 
   @override
@@ -256,6 +340,7 @@ class _$CardModelImpl implements _CardModel {
         (other.runtimeType == runtimeType &&
             other is _$CardModelImpl &&
             (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.holderName, holderName) ||
                 other.holderName == holderName) &&
@@ -266,13 +351,35 @@ class _$CardModelImpl implements _CardModel {
                 other.isDefault == isDefault) &&
             (identical(other.balance, balance) || other.balance == balance) &&
             (identical(other.income, income) || other.income == income) &&
-            (identical(other.expense, expense) || other.expense == expense));
+            (identical(other.expense, expense) || other.expense == expense) &&
+            (identical(other.spendingLimit, spendingLimit) ||
+                other.spendingLimit == spendingLimit) &&
+            (identical(other.isLimitReminderEnabled, isLimitReminderEnabled) ||
+                other.isLimitReminderEnabled == isLimitReminderEnabled) &&
+            (identical(other.lastLimitReminderSent, lastLimitReminderSent) ||
+                other.lastLimitReminderSent == lastLimitReminderSent) &&
+            (identical(other.transactionType, transactionType) ||
+                other.transactionType == transactionType));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, uuid, name, holderName,
-      accountNumber, color, isDefault, balance, income, expense);
+  int get hashCode => Object.hash(
+      runtimeType,
+      uuid,
+      userId,
+      name,
+      holderName,
+      accountNumber,
+      color,
+      isDefault,
+      balance,
+      income,
+      expense,
+      spendingLimit,
+      isLimitReminderEnabled,
+      lastLimitReminderSent,
+      transactionType);
 
   /// Create a copy of CardModel
   /// with the given fields replaced by the non-null parameter values.
@@ -292,7 +399,8 @@ class _$CardModelImpl implements _CardModel {
 
 abstract class _CardModel implements CardModel {
   const factory _CardModel(
-      {final String? uuid,
+      {required final String? uuid,
+      required final String? userId,
       required final String name,
       required final String holderName,
       required final String accountNumber,
@@ -300,7 +408,11 @@ abstract class _CardModel implements CardModel {
       final bool? isDefault,
       final double? balance,
       final double? income,
-      final double? expense}) = _$CardModelImpl;
+      final double? expense,
+      final double? spendingLimit,
+      final bool? isLimitReminderEnabled,
+      final DateTime? lastLimitReminderSent,
+      final TransactionType? transactionType}) = _$CardModelImpl;
 
   factory _CardModel.fromJson(Map<String, dynamic> json) =
       _$CardModelImpl.fromJson;
@@ -308,11 +420,13 @@ abstract class _CardModel implements CardModel {
   @override
   String? get uuid;
   @override
+  String? get userId;
+  @override
   String get name;
   @override
   String get holderName;
   @override
-  String get accountNumber; //required IconData icon,
+  String get accountNumber;
   @override
   int get color;
   @override
@@ -322,7 +436,16 @@ abstract class _CardModel implements CardModel {
   @override
   double? get income;
   @override
-  double? get expense;
+  double? get expense; // 🔔 Hạn mức chi tiêu được đặt cho thẻ
+  @override
+  double? get spendingLimit; // ⏰ Bật tắt nhắc nhở khi vượt hạn mức
+  @override
+  bool?
+      get isLimitReminderEnabled; // 📅 Thời điểm lần cuối gửi cảnh báo (giúp tránh spam thông báo)
+  @override
+  DateTime? get lastLimitReminderSent;
+  @override
+  TransactionType? get transactionType;
 
   /// Create a copy of CardModel
   /// with the given fields replaced by the non-null parameter values.

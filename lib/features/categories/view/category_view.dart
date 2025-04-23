@@ -4,6 +4,8 @@ import 'package:daily_expense_tracker_app/features/categories/view/widgets/categ
 import 'package:db_firestore_client/db_firestore_client.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/shared/custom_app_bar.dart';
+
 class CategoryView extends StatefulWidget {
   const CategoryView({super.key});
 
@@ -41,12 +43,7 @@ class _CategoryViewState extends State<CategoryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Quản lý danh mục",
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-        ),
-      ),
+      appBar: const CustomAppBar(title: 'Quản lý danh mục'),
       body: RefreshIndicator(
         onRefresh: () async {
           setState(() {});

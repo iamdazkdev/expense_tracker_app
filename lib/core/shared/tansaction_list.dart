@@ -14,16 +14,23 @@ import 'custom_item_button.dart';
 
 class TransactionList extends StatelessWidget {
   const TransactionList({
-    Key? key,
+    super.key,
     required this.allTransactions,
     this.isViewOnly = false,
-  }) : super(key: key);
+  });
 
   final List<Transaction> allTransactions;
   final bool isViewOnly;
 
   @override
   Widget build(BuildContext context) {
+    for (var transaction in allTransactions) {
+      debugPrint('Transaction ID: ${transaction.uuid}');
+      debugPrint('Amount: ${transaction.amount}');
+      debugPrint('Category: ${transaction.category}');
+      debugPrint('DateTime: ${transaction.date}');
+      debugPrint('----------------------------');
+    }
     return Expanded(
       child: allTransactions.isEmpty
           ? Center(

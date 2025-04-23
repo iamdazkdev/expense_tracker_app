@@ -5,4 +5,5 @@ abstract class TransactionBaseRepository {
   Future<AppResult<void>> addTransaction(Transaction transaction);
   Future<AppResult<void>> updateTransaction(Transaction transaction);
   Future<AppResult<void>> deleteTransaction(String transactionId);
+  Future<AppResult<void>> getTransactionById(String transactionId);
 }

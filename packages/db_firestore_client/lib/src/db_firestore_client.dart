@@ -132,22 +132,6 @@ class DbFirestoreClient implements DbFirestoreClientBase {
     return result;
   }
 
-/*  @override
-  Future<List<T>> getQuery<T>({
-    required String collectionPath,
-    required ObjectMapper<T> mapper,
-    String? field,
-    dynamic isEqualTo,
-  }) async {
-    return _firestore
-        .collection(collectionPath)
-        .where(field, isEqualTo: isEqualTo)
-        .get()
-        .then((snapshot) => snapshot.docs
-            .map((doc) => mapper(doc.data(), doc.id))
-            .toList(growable: false));
-  }*/
-
   @override
   Future<List<T>> getQuery<T>({
     required String collectionPath,
@@ -218,8 +202,8 @@ class DbFirestoreClient implements DbFirestoreClientBase {
   Future<List<T>> getQueryOrderBy<T>({
     required String collectionPath,
     required ObjectMapper<T> mapper,
-    String? field, // Thay đổi field thành nullable
-    dynamic isEqualTo, // Thay đổi isEqualTo thành nullable
+    String? field,
+    dynamic isEqualTo,
     required String orderByField,
     bool descending = false,
     int? limit,
@@ -243,27 +227,6 @@ class DbFirestoreClient implements DbFirestoreClientBase {
             .toList(growable: false))
         .then((value) => limit != null ? value.take(limit).toList() : value);
   }
-
-/*  @override
-  Future<List<T>> getQueryOrderBy<T>({
-    required String collectionPath,
-    required ObjectMapper<T> mapper,
-    required String field,
-    required dynamic isEqualTo,
-    required String orderByField,
-    bool descending = false,
-    int? limit,
-  }) async {
-    return _firestore
-        .collection(collectionPath)
-        .where(field, isEqualTo: isEqualTo)
-        .orderBy(orderByField, descending: descending)
-        .get()
-        .then((snapshot) => snapshot.docs
-            .map((doc) => mapper(doc.data(), doc.id))
-            .toList(growable: false))
-        .then((value) => limit != null ? value.take(limit).toList() : value);
-  }*/
 
   @override
   Stream<List<T>> streamQueryOrderBy<T>({

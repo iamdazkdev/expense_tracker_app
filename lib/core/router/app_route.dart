@@ -21,6 +21,7 @@ class RoutesName {
   static const String loginWithAccount = '/loginWithAccount';
   static const String categories = '/categories';
   static const String cards = '/cards';
+  static const String statisticals = '/statisticals';
 }
 
 @immutable
@@ -70,6 +71,11 @@ class AppRouter {
           routeName: settings.name,
           viewToShow: const CardView(),
         );
+      /*  case RoutesName.statisticals:
+        return _getPageRoute(
+          routeName: settings.name,
+          viewToShow: StatisticalView(),
+        );*/
 
       default:
         return _getPageRoute(

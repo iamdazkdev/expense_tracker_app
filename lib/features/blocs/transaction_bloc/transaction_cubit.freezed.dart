@@ -27,7 +27,8 @@ mixin _$TransactionState {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)
+            String cardID,
+            List<CardModel> listCards)
         loadTransaction,
   }) =>
       throw _privateConstructorUsedError;
@@ -42,7 +43,8 @@ mixin _$TransactionState {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)?
+            String cardID,
+            List<CardModel> listCards)?
         loadTransaction,
   }) =>
       throw _privateConstructorUsedError;
@@ -57,7 +59,8 @@ mixin _$TransactionState {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)?
+            String cardID,
+            List<CardModel> listCards)?
         loadTransaction,
     required TResult orElse(),
   }) =>
@@ -163,7 +166,8 @@ class _$InitialImpl implements _Initial {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)
+            String cardID,
+            List<CardModel> listCards)
         loadTransaction,
   }) {
     return initial();
@@ -181,7 +185,8 @@ class _$InitialImpl implements _Initial {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)?
+            String cardID,
+            List<CardModel> listCards)?
         loadTransaction,
   }) {
     return initial?.call();
@@ -199,7 +204,8 @@ class _$InitialImpl implements _Initial {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)?
+            String cardID,
+            List<CardModel> listCards)?
         loadTransaction,
     required TResult orElse(),
   }) {
@@ -304,7 +310,8 @@ class _$LoadingImpl implements Loading {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)
+            String cardID,
+            List<CardModel> listCards)
         loadTransaction,
   }) {
     return loading();
@@ -322,7 +329,8 @@ class _$LoadingImpl implements Loading {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)?
+            String cardID,
+            List<CardModel> listCards)?
         loadTransaction,
   }) {
     return loading?.call();
@@ -340,7 +348,8 @@ class _$LoadingImpl implements Loading {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)?
+            String cardID,
+            List<CardModel> listCards)?
         loadTransaction,
     required TResult orElse(),
   }) {
@@ -472,7 +481,8 @@ class _$SuccessImpl implements Success {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)
+            String cardID,
+            List<CardModel> listCards)
         loadTransaction,
   }) {
     return success(message);
@@ -490,7 +500,8 @@ class _$SuccessImpl implements Success {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)?
+            String cardID,
+            List<CardModel> listCards)?
         loadTransaction,
   }) {
     return success?.call(message);
@@ -508,7 +519,8 @@ class _$SuccessImpl implements Success {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)?
+            String cardID,
+            List<CardModel> listCards)?
         loadTransaction,
     required TResult orElse(),
   }) {
@@ -648,7 +660,8 @@ class _$ErrorImpl implements Error {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)
+            String cardID,
+            List<CardModel> listCards)
         loadTransaction,
   }) {
     return error(message);
@@ -666,7 +679,8 @@ class _$ErrorImpl implements Error {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)?
+            String cardID,
+            List<CardModel> listCards)?
         loadTransaction,
   }) {
     return error?.call(message);
@@ -684,7 +698,8 @@ class _$ErrorImpl implements Error {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)?
+            String cardID,
+            List<CardModel> listCards)?
         loadTransaction,
     required TResult orElse(),
   }) {
@@ -758,7 +773,8 @@ abstract class _$$LoadTransactionImplCopyWith<$Res> {
       CategoryModel? categoryModel,
       DateTime transactionDate,
       TransactionType transactionCategory,
-      String cardID});
+      String cardID,
+      List<CardModel> listCards});
 
   $CategoryModelCopyWith<$Res>? get categoryModel;
 }
@@ -781,6 +797,7 @@ class __$$LoadTransactionImplCopyWithImpl<$Res>
     Object? transactionDate = null,
     Object? transactionCategory = null,
     Object? cardID = null,
+    Object? listCards = null,
   }) {
     return _then(_$LoadTransactionImpl(
       categorys: null == categorys
@@ -803,6 +820,10 @@ class __$$LoadTransactionImplCopyWithImpl<$Res>
           ? _value.cardID
           : cardID // ignore: cast_nullable_to_non_nullable
               as String,
+      listCards: null == listCards
+          ? _value._listCards
+          : listCards // ignore: cast_nullable_to_non_nullable
+              as List<CardModel>,
     ));
   }
 
@@ -829,7 +850,9 @@ class _$LoadTransactionImpl implements LoadTransaction {
       this.categoryModel,
       required this.transactionDate,
       required this.transactionCategory,
-      required this.cardID});
+      required this.cardID,
+      required final List<CardModel> listCards})
+      : _listCards = listCards;
 
   @override
   final Categorys categorys;
@@ -841,10 +864,17 @@ class _$LoadTransactionImpl implements LoadTransaction {
   final TransactionType transactionCategory;
   @override
   final String cardID;
+  final List<CardModel> _listCards;
+  @override
+  List<CardModel> get listCards {
+    if (_listCards is EqualUnmodifiableListView) return _listCards;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_listCards);
+  }
 
   @override
   String toString() {
-    return 'TransactionState.loadTransaction(categorys: $categorys, categoryModel: $categoryModel, transactionDate: $transactionDate, transactionCategory: $transactionCategory, cardID: $cardID)';
+    return 'TransactionState.loadTransaction(categorys: $categorys, categoryModel: $categoryModel, transactionDate: $transactionDate, transactionCategory: $transactionCategory, cardID: $cardID, listCards: $listCards)';
   }
 
   @override
@@ -860,12 +890,20 @@ class _$LoadTransactionImpl implements LoadTransaction {
                 other.transactionDate == transactionDate) &&
             (identical(other.transactionCategory, transactionCategory) ||
                 other.transactionCategory == transactionCategory) &&
-            (identical(other.cardID, cardID) || other.cardID == cardID));
+            (identical(other.cardID, cardID) || other.cardID == cardID) &&
+            const DeepCollectionEquality()
+                .equals(other._listCards, _listCards));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, categorys, categoryModel,
-      transactionDate, transactionCategory, cardID);
+  int get hashCode => Object.hash(
+      runtimeType,
+      categorys,
+      categoryModel,
+      transactionDate,
+      transactionCategory,
+      cardID,
+      const DeepCollectionEquality().hash(_listCards));
 
   /// Create a copy of TransactionState
   /// with the given fields replaced by the non-null parameter values.
@@ -888,11 +926,12 @@ class _$LoadTransactionImpl implements LoadTransaction {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)
+            String cardID,
+            List<CardModel> listCards)
         loadTransaction,
   }) {
-    return loadTransaction(
-        categorys, categoryModel, transactionDate, transactionCategory, cardID);
+    return loadTransaction(categorys, categoryModel, transactionDate,
+        transactionCategory, cardID, listCards);
   }
 
   @override
@@ -907,11 +946,12 @@ class _$LoadTransactionImpl implements LoadTransaction {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)?
+            String cardID,
+            List<CardModel> listCards)?
         loadTransaction,
   }) {
-    return loadTransaction?.call(
-        categorys, categoryModel, transactionDate, transactionCategory, cardID);
+    return loadTransaction?.call(categorys, categoryModel, transactionDate,
+        transactionCategory, cardID, listCards);
   }
 
   @override
@@ -926,13 +966,14 @@ class _$LoadTransactionImpl implements LoadTransaction {
             CategoryModel? categoryModel,
             DateTime transactionDate,
             TransactionType transactionCategory,
-            String cardID)?
+            String cardID,
+            List<CardModel> listCards)?
         loadTransaction,
     required TResult orElse(),
   }) {
     if (loadTransaction != null) {
       return loadTransaction(categorys, categoryModel, transactionDate,
-          transactionCategory, cardID);
+          transactionCategory, cardID, listCards);
     }
     return orElse();
   }
@@ -984,13 +1025,15 @@ abstract class LoadTransaction implements TransactionState {
       final CategoryModel? categoryModel,
       required final DateTime transactionDate,
       required final TransactionType transactionCategory,
-      required final String cardID}) = _$LoadTransactionImpl;
+      required final String cardID,
+      required final List<CardModel> listCards}) = _$LoadTransactionImpl;
 
   Categorys get categorys;
   CategoryModel? get categoryModel;
   DateTime get transactionDate;
   TransactionType get transactionCategory;
   String get cardID;
+  List<CardModel> get listCards;
 
   /// Create a copy of TransactionState
   /// with the given fields replaced by the non-null parameter values.

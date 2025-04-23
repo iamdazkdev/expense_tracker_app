@@ -35,6 +35,38 @@ class Alerts {
     );
   }
 
+  static void showSheetAllScreen({
+    required BuildContext context,
+    required Widget child,
+    double horizontalMargin = 0.03,
+    double topRadius = 32,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      useSafeArea: true,
+      isScrollControlled: true,
+      showDragHandle: true,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(topRadius),
+        ),
+      ),
+      constraints: BoxConstraints(
+/*
+        maxWidth: context.deviceSize.width * (1 - horizontalMargin * 2),
+*/
+        maxHeight: context.deviceSize.height,
+        maxWidth: context.deviceSize.width * 0.97,
+      ),
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: child,
+        );
+      },
+    );
+  }
+
   static Future<DateTime?> showPickerTransactionDate({
     required BuildContext context,
     required DateTime initialDate,

@@ -1,14 +1,32 @@
-import 'package:flutter/widgets.dart';
+import 'package:auth_user/auth_user.dart';
+import 'package:db_firestore_client/db_firestore_client.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../core/extension/extension.dart';
 import '../../../../core/models/transactions/transaction_model.dart';
 import '../../../../core/styles/app_text_style.dart';
 import '../../../blocs/state_bloc/state_cubit.dart';
+import '../../../statisticals/data/stat_comparison_utils.dart';
+import '../../../statisticals/view/statisticals_view.dart';
 import 'widgets.dart';
 
-class SummaryCard extends StatelessWidget {
+class SummaryCard extends StatefulWidget {
   const SummaryCard({super.key});
+
+  @override
+  State<SummaryCard> createState() => _SummaryCardState();
+}
+
+class _SummaryCardState extends State<SummaryCard> {
+  late DbFirestoreClientBase _dbFirestoreClient;
+  @override
+  void initState() {
+    // TODO: implement initState
+    _dbFirestoreClient = DbFirestoreClient();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +87,56 @@ class SummaryCard extends StatelessWidget {
                     orElse: () => const SizedBox.shrink(),
                   );
                 },
-              )
+              ),
+              ElevatedButton.icon(
+                icon: const Icon(
+                  FontAwesomeIcons.chartLine,
+                ),
+                label: const Text("Xem thống kê chi tiêu"),
+                style: ElevatedButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primaryContainer,
+                  foregroundColor:
+                      Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
+                onPressed: () async {
+                  final transactions =
+                      await _dbFirestoreClient.getQueryOrderBy<Transaction>(
+                    collectionPath: 'transactions',
+                    field: 'userId',
+                    isEqualTo: AuthUser().currentUser!.uid,
+                    descending: true,
+                    orderByField: 'amount',
+                    mapper: (data, documentId) => Transaction.fromJson(data!),
+                  );
+                  final now = DateTime.now();
+                  // Generate comparison data for week, month, and year
+                  final weeklyData =
+                      generateComparisonData(transactions, now, 'week');
+                  final monthlyData =
+                      generateComparisonData(transactions, now, 'month');
+                  final yearlyData =
+                      generateComparisonData(transactions, now, 'year');
+
+                  setState(() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => StatisticalView(
+                          weeklyData: weeklyData,
+                          monthlyData: monthlyData,
+                          yearlyData: yearlyData,
+                        ),
+                      ),
+                    );
+                  });
+                },
+              ),
             ],
           ),
         );

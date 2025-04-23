@@ -1,4 +1,5 @@
 import 'package:auth_user/auth_user.dart';
+import 'package:daily_expense_tracker_app/core/extension/extension.dart';
 import 'package:daily_expense_tracker_app/core/helper/helper.dart';
 import 'package:daily_expense_tracker_app/core/models/cards/card_model.dart';
 import 'package:daily_expense_tracker_app/features/cards/data/card_base_repository.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../../core/enum/app_icons.dart';
 import '../../../../core/shared/custom_button_actions.dart';
 import '../../data/card_repository.dart';
 
@@ -34,9 +34,14 @@ class _AccountForm extends State<CardForm> {
   late TextEditingController _cardNumberController = TextEditingController();
   late TextEditingController _nameCardController;
   late TextEditingController _holderNameController;
+  late TextEditingController _limitController;
+  // late TextEditingController _spendingLimit;
   bool _validateCardNumber = true;
   String _formattedCardNumber = '';
   final int _cardLength = 16;
+  bool isSaving = false;
+
+  double _spendingLimit = 5000000;
   @override
   void initState() {
     super.initState();
@@ -51,17 +56,27 @@ class _AccountForm extends State<CardForm> {
           name: widget.card!.name,
           holderName: widget.card!.holderName,
           accountNumber: widget.card!.accountNumber,
-          color: widget.card!.color);
+          balance: widget.card!.balance,
+          spendingLimit: widget.card!.spendingLimit,
+          income: widget.card!.income,
+          expense: widget.card!.expense,
+          color: widget.card!.color,
+          userId: widget.card!.userId);
       _nameCardController = TextEditingController(text: _cardModel!.name);
       _holderNameController =
           TextEditingController(text: _cardModel!.holderName);
       _cardNumberController =
           TextEditingController(text: _cardModel!.accountNumber);
+      debugPrint("Spend limit: ${_cardModel!.spendingLimit.toString()}");
+      _limitController =
+          TextEditingController(text: _cardModel!.spendingLimit.toString());
     } else {
       _cardModel = CardModel.empty();
       _nameCardController = TextEditingController();
       _holderNameController = TextEditingController();
       _cardNumberController = TextEditingController();
+      _limitController =
+          TextEditingController(text: _spendingLimit.toInt().toString());
     }
     _cardNumberController.addListener(() {
       final text = _cardNumberController.text;
@@ -81,29 +96,59 @@ class _AccountForm extends State<CardForm> {
     });
   }
 
-  void onSave(context) async {
-    if (_formKey.currentState?.validate() ?? false) {
-      if (_cardModel == null) {
-        debugPrint("Card model is null");
-      }
-      _cardModel = _cardModel!.copyWith(
-        uuid: Helper.generateUUID(),
+  void updateSpendingLimit() {
+    final rawValue =
+        _limitController.text.replaceAll('.', '').replaceAll(' ', '');
+    final parsedValue = double.tryParse(rawValue);
+    if (parsedValue != null) {
+      setState(() {
+        _spendingLimit = parsedValue;
+      });
+    } else {
+      // Handle invalid number input if needed
+      debugPrint("Invalid number input");
+    }
+  }
+
+  Future<void> onSave(BuildContext context) async {
+    if (isSaving) return; // Ngăn double-tap
+    final isValid = _formKey.currentState?.validate() ?? false;
+
+    if (!isValid || !_validateCardNumber) {
+      debugPrint("Form không hợp lệ");
+      return;
+    }
+
+    setState(() => isSaving = true);
+
+    try {
+      final updatedCard = _cardModel!.copyWith(
+        uuid: widget.isEdit == true ? widget.card!.uuid : Helper.generateUUID(),
         name: _nameCardController.text.trim(),
+        userId: AuthUser().currentUser!.uid,
         holderName: _holderNameController.text.trim(),
         accountNumber: _cardNumberController.text.trim(),
         color: _cardModel!.color,
+        isDefault: widget.isEdit == true
+            ? (widget.card!.isDefault != false ? true : false)
+            : false,
+        spendingLimit: _limitController.text.trim().toDoubleFromCurrency(),
       );
+
       if (widget.isEdit == true) {
-        debugPrint("Trying to Update Card: ${_cardModel!.name}");
-        await _cardRepository.updateCard(_cardModel!);
+        debugPrint("Cập nhật thẻ: ${updatedCard.toString()}");
+        await _cardRepository.updateCard(updatedCard);
       } else {
-        debugPrint("Trying to Add Card");
-        await _cardRepository.addCard(_cardModel!);
+        debugPrint("Thêm thẻ mới");
+        await _cardRepository.addCard(updatedCard);
       }
-      if (widget.onSave != null) {
-        widget.onSave!();
-      }
-      Navigator.pop(context);
+
+      widget.onSave?.call();
+      if (context.mounted) Navigator.pop(context);
+    } catch (e) {
+      debugPrint("Lỗi khi lưu thẻ: $e");
+    } finally {
+      setState(() => isSaving = false);
     }
   }
 
@@ -172,6 +217,7 @@ class _AccountForm extends State<CardForm> {
   @override
   void dispose() {
     _cardNumberController.dispose();
+    _limitController.dispose();
     super.dispose();
   }
 
@@ -260,11 +306,6 @@ class _AccountForm extends State<CardForm> {
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
                 ),
-                /*onChanged: (text) {
-                  setState(() {
-                    _cardModel = _cardModel!.copyWith(holderName: text.trim());
-                  });
-                },*/
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Vui lòng nhập tên chủ thẻ';
@@ -336,45 +377,54 @@ class _AccountForm extends State<CardForm> {
               ),
               const SizedBox(height: 10),
               // Icon picker
-              SizedBox(
-                height: 45,
-                width: double.infinity,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: AppIcons.icons.length,
-                  itemBuilder: (BuildContext context, index) => Container(
-                    width: 45,
-                    height: 45,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 2.5, vertical: 2.5),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          // _cardModel!.icon = AppIcons.icons[index];
-                        });
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(40),
-                          border: Border.all(
-                            color: Colors.transparent,
-                            width: 2,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Đặt hạn mức",
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Slider(
+                    value: _spendingLimit.clamp(0, 100000000),
+                    min: 0,
+                    max: 100000000, // 10 triệu
+                    divisions: 100,
+                    label: _spendingLimit.toInt().toCurrencyWithSymbol(),
+                    onChanged: (value) {
+                      setState(() {
+                        _spendingLimit = value;
+                        final formatted =
+                            value.toInt().toCurrencyWithSymbol(symbol: '');
+                        _limitController.value = TextEditingValue(
+                          text: formatted,
+                          selection:
+                              TextSelection.collapsed(offset: formatted.length),
+                        );
+                      });
+                    },
+                  ),
+                  Row(
+                    children: [
+                      const Text("Hạn mức:"),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextFormField(
+                          controller: _limitController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            suffixText: "VND",
                           ),
-                        ),
-                        child: Icon(
-                          AppIcons.icons[index],
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 18,
+                          onChanged: (value) {
+                            updateSpendingLimit();
+                          },
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ),
-              ),
+                ],
+              )
             ],
           ),
         ),

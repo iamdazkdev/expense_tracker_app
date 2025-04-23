@@ -26,16 +26,17 @@ class HeaderAppBarFilter extends StatelessWidget {
         const Spacer(),
         CustomIconBottom(
           icon: FontAwesomeIcons.filter,
-          onPressed: () => _showModalSheet(context),
+          onPressed: () => _showModalSheetFilter(context),
         )
       ],
     );
   }
 
-  void _showModalSheet(BuildContext context) {
+  void _showModalSheetFilter(BuildContext context) {
     String? selectedRange;
 
     Alerts.showSheet(
+      height: MediaQuery.of(context).size.height * 0.8,
       context: context,
       child: SingleChildScrollView(
         child: Container(
@@ -45,20 +46,18 @@ class HeaderAppBarFilter extends StatelessWidget {
             children: [
               FilterForm(
                 onRangeSelected: (value) {
-                  selectedRange = value; // Cập nhật khi user chọn box
+                  selectedRange = value;
                 },
               ),
               CustomMaterialButton(
                 text: 'Xong',
                 onPressed: () {
                   context.pop();
-                  context.read<StateCubit>().applyFilter();
-
+                  final stateCubit = context.read<StateCubit>();
                   if (selectedRange != null) {
-                    context.read<StateCubit>().applyQuickFilter(selectedRange!);
-                  } else {
-                    context.read<StateCubit>().applyFilter();
+                    stateCubit.applyQuickFilter(selectedRange!);
                   }
+                  stateCubit.applyFilter();
                 },
               ),
             ],

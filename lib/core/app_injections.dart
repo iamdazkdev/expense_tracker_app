@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auth_user/auth_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:db_firestore_client/db_firestore_client.dart';
@@ -19,6 +21,7 @@ import '../features/home/data/main_repository/main_base_repository.dart';
 import '../features/home/data/main_repository/main_repository.dart';
 import '../features/home/data/state_repository/state_base_repository.dart';
 import '../features/home/data/state_repository/state_repository.dart';
+import '../features/notifications/data/firebase_messaging_api.dart';
 import '../features/profile/data/profile_repository/profile_base_repository.dart';
 import '../features/profile/data/profile_repository/profile_repository.dart';
 import '../features/settings/data/auth_repository/auth_base_repository.dart';
@@ -32,6 +35,7 @@ import 'models/transactions/transaction_hive_model.dart';
 import 'service/network_info.dart';
 
 final getIt = GetIt.I;
+late Timer _timer;
 
 Future<void> initAppConfig() async {
   // Initialize [FirebaseApp].
@@ -41,6 +45,7 @@ Future<void> initAppConfig() async {
     persistenceEnabled: true,
   );
 
+  await FirebaseMessagingApi().initializeNotifications();
   //dbFirestoreClient
   final dbFirestoreClient = DbFirestoreClient();
   getIt.registerLazySingleton<DbFirestoreClientBase>(() => dbFirestoreClient);
@@ -91,8 +96,8 @@ Future<void> initAppConfig() async {
 
   //TransactionBloc && TransactionRepository
   getIt.registerLazySingleton(() => transactionRepository);
-  getIt.registerFactory(() =>
-      TransactionCubit(transactionRepository: getIt(), networkInfo: getIt()));
+  getIt.registerFactory(() => TransactionCubit(
+      transactionRepository: getIt() /*, cardRepository: getIt()*/));
 
   //=>
   //AuthProfileBaseRepository (AuthProfileRepository)

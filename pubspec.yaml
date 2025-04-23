@@ -15,7 +15,7 @@ dependencies:
   flutter_styled_toast: ^2.2.1
   font_awesome_flutter: ^10.6.0
   image_picker: ^1.0.7
-  fl_chart: ^0.70.2
+  fl_chart: ^0.71.0
 
   # State Management
   bloc: ^9.0.0
@@ -64,6 +64,11 @@ dependencies:
   font_awesome_metadata: ^1.0.1
   collection: ^1.19.1
   currency_picker: ^2.0.21
+  flutter_local_notifications: ^19.1.0
+  permission_handler: ^12.0.0+1
+  firebase_messaging: ^14.9.4
+  
+  #workmanager: ^0.5.2
 
 dev_dependencies:
   # Linting

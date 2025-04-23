@@ -1,14 +1,15 @@
-import 'dart:convert';
-
 import 'package:daily_expense_tracker_app/core/models/cards/card_model.dart';
+import 'package:daily_expense_tracker_app/core/router/app_route.dart';
+import 'package:daily_expense_tracker_app/features/cards/view/widgets/card_display_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/enum/enum.dart';
 import '../../../../core/extension/extension.dart';
+import '../../../../core/helper/shared_prefs_storage.dart';
 import '../../../../core/models/categories/category_model.dart';
 import '../../../../core/router/router.dart';
 import '../../../../core/shared/shared.dart';
@@ -33,22 +34,18 @@ class _TransactionFormState extends State<TransactionForm> {
 
   Future<void> initAsync() async {
     context.read<TransactionCubit>().init();
-    listCategories = await getCachedCategoryModels();
-    listCards = await getCachedCardModels();
+    listCategories = await SharedPrefsStorage.getCachedCategoryModels();
+    listCards = await SharedPrefsStorage.getCachedCardModels();
+    _debugCards();
   }
 
-  Future<List<CategoryModel>> getCachedCategoryModels() async {
-    final prefs = await SharedPreferences.getInstance();
-    final List<String>? jsonList = prefs.getStringList("cached_categories");
-    if (jsonList == null) return [];
-    return jsonList.map((e) => CategoryModel.fromJson(json.decode(e))).toList();
-  }
-
-  Future<List<CardModel>> getCachedCardModels() async {
-    final prefs = await SharedPreferences.getInstance();
-    final List<String>? jsonList = prefs.getStringList("cached_cards");
-    if (jsonList == null) return [];
-    return jsonList.map((e) => CardModel.fromJson(json.decode(e))).toList();
+  void _debugCards() async {
+    final cards = await SharedPrefsStorage.getCachedCardModels();
+    for (var card in cards) {
+      if (kDebugMode) {
+        print(card.toJson());
+      }
+    }
   }
 
   @override
@@ -68,25 +65,39 @@ class _TransactionFormState extends State<TransactionForm> {
         final transactionCategory = state.mapOrNull(
           loadTransaction: (state) => state.transactionCategory,
         );
-
         final transactionDate = state.mapOrNull(
           loadTransaction: (state) => state.transactionDate,
         );
-
         final cardID = state.mapOrNull(
           loadTransaction: (state) => state.cardID,
         );
-        /*  final selectedCard = listCards.firstWhere(
-          (card) => card.uuid == cardID,
-          orElse: () => CardModel(
-              name: 'Loại thẻ', holderName: '', accountNumber: '', color: 12),
+        final listCards = state.mapOrNull(
+          loadTransaction: (state) => state.listCards,
         );
-        Categorys? getCategoryByName(String name) {
-          return Categorys.values.firstWhere(
-            (e) => e.name.toLowerCase().trim() == name.toLowerCase().trim(),
-            orElse: () => Categorys.others,
+
+        if (listCards == null) {
+          return Center(
+            child: ElevatedButton.icon(
+              icon: const Icon(Icons.add),
+              label: const Text("Thêm thẻ để tiếp tục"),
+              style: ElevatedButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                // Dùng màu primaryContainer để ôn hoà với light & dark mode
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                foregroundColor:
+                    Theme.of(context).colorScheme.onPrimaryContainer,
+              ),
+              onPressed: () {
+                context.pushNamed(RoutesName.cards);
+              },
+            ),
           );
-        }*/
+        }
+
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -117,7 +128,7 @@ class _TransactionFormState extends State<TransactionForm> {
                   backgroundIcon: transactionCategory.backgroundIcon,
                   backgroundItem: backgroundItem,
                   icon: transactionCategory.icon,
-                  onPressed: () => _showModalSheetTransactionCategory(context),
+                  onPressed: () => _showModalSheetTransactionType(context),
                 ),
                 CustomItemButton(
                   text: listCards
@@ -127,7 +138,9 @@ class _TransactionFormState extends State<TransactionForm> {
                             name: 'Loại thẻ',
                             holderName: '',
                             accountNumber: '',
-                            color: 123),
+                            color: 123,
+                            uuid: '',
+                            userId: ''),
                       )
                       .name,
                   padding: padding,
@@ -203,7 +216,6 @@ class _TransactionFormState extends State<TransactionForm> {
       );
     }
 
-    debugPrint("List categories at Sheet is: ${listCategories.toString()}");
     Alerts.showSheet(
       context: context,
       child: Expanded(
@@ -238,7 +250,7 @@ class _TransactionFormState extends State<TransactionForm> {
     );
   }
 
-  void _showModalSheetTransactionCategory(BuildContext context) {
+  void _showModalSheetTransactionType(BuildContext context) {
     Alerts.showSheet(
       context: context,
       child: Padding(
@@ -260,7 +272,7 @@ class _TransactionFormState extends State<TransactionForm> {
                 onPressed: () {
                   context
                       .read<TransactionCubit>()
-                      .onTransactionCategoryChanged(transactionCategory);
+                      .onTransactionTypeChanged(transactionCategory);
 
                   context.pop();
                 },
@@ -273,40 +285,40 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   void _showModalSheetTransactionCards(BuildContext context) {
-    Alerts.showSheet(
+    Alerts.showSheetAllScreen(
       context: context,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 25.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-              child: Text(
-                "Chọn thẻ giao dịch",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-            ),
-            ...listCards.map(
-              (card) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: CustomItemButton(
-                  text: card.name,
-                  iconColor: Colors.white,
-                  icon: FontAwesomeIcons.wallet,
-                  backgroundIcon: card.getColor.withOpacity(0.7),
-                  backgroundItem: Colors.transparent,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  onPressed: () {
-                    /// Gọi xử lý khi chọn thẻ, ví dụ:
-                    context.read<TransactionCubit>().onCardChanged(card);
-                    context.pop(); // đóng modal sau khi chọn
-                  },
+        padding: const EdgeInsets.only(bottom: 25.0, left: 12, right: 12),
+        child: ConstrainedBox(
+          // Giới hạn chiều cao tối đa của sheet, ví dụ 80% chiều cao màn hình
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.8,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+                  child: Text(
+                    "Chọn thẻ giao dịch",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
                 ),
-              ),
+                // Danh sách card
+                ...listCards.map(
+                  (card) => CardDisplayWidget(
+                    card: card,
+                    onCardSelect: () {},
+                    onCardOptions: () {
+                      context.read<TransactionCubit>().onCardChanged(card);
+                      context.pop();
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

@@ -30,5 +30,6 @@ class TransactionState with _$TransactionState {
     required DateTime transactionDate,
     required TransactionType transactionCategory,
     required String cardID,
+    required List<CardModel> listCards,
   }) = LoadTransaction;
 }

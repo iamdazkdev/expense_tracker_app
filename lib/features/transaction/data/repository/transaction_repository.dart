@@ -48,7 +48,6 @@ class TransactionRepository implements TransactionBaseRepository {
               .toJson(),
         );
       }
-
       return const AppResult.success(null);
     } catch (err) {
       return AppResult.failure(err.toString());
@@ -91,6 +90,22 @@ class TransactionRepository implements TransactionBaseRepository {
       );
 
       return const AppResult.success(null);
+    } catch (err) {
+      return AppResult.failure(err.toString());
+    }
+  }
+
+  @override
+  Future<AppResult<Transaction?>> getTransactionById(
+      String transactionId) async {
+    try {
+      final transaction = await _dbFirestoreClient.getDocument<Transaction>(
+        documentId: transactionId,
+        collectionPath: 'transactions',
+        objectMapper: (data, id) => Transaction.fromMap(data!, transactionId),
+      );
+
+      return AppResult.success(transaction);
     } catch (err) {
       return AppResult.failure(err.toString());
     }
