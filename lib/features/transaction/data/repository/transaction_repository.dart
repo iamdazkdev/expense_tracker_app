@@ -3,8 +3,12 @@ import 'dart:async';
 import 'package:auth_user/auth_user.dart';
 import 'package:db_firestore_client/db_firestore_client.dart';
 import 'package:db_hive_client/db_hive_client.dart';
+import 'package:flutter/cupertino.dart';
 
+import '../../../../core/enum/transaction.dart';
 import '../../../../core/helper/helper.dart';
+import '../../../../core/helper/shared_prefs_storage.dart';
+import '../../../../core/models/cards/card_model.dart';
 import '../../../../core/models/transactions/transaction_hive_model.dart';
 import '../../../../core/models/transactions/transaction_model.dart';
 import '../../../../core/utils/models/app_result.dart';
@@ -85,6 +89,33 @@ class TransactionRepository implements TransactionBaseRepository {
         );
         return const AppResult.success(null);
       }
+      Transaction? transaction = await _dbFirestoreClient.getDocument(
+          documentId: transactionId,
+          collectionPath: "transactions",
+          objectMapper: (data, id) =>
+              Transaction.fromMap(data!, transactionId));
+      if (transaction == null) {
+        return AppResult.failure("Xảy ra lỗi khi lấy giao dịch");
+      }
+      final card = await getCardById(transaction.cardID);
+      if (card == null) {
+        return AppResult.failure("Xảy ra lỗi khi lấy thẻ");
+      }
+      CardModel updatedCard = card;
+      if (transaction.category == TransactionType.income) {
+        updatedCard = updatedCard.copyWith(
+          income: (updatedCard.income ?? 0) - transaction.amount,
+        );
+      } else {
+        updatedCard = updatedCard.copyWith(
+          expense: (updatedCard.expense ?? 0) - transaction.amount,
+        );
+      }
+      await _dbFirestoreClient.updateDocument(
+        collectionPath: 'cards/${updatedCard.uuid}',
+        data: updatedCard.toJson(),
+      );
+
       await _dbFirestoreClient.deleteDocument(
         collectionPath: 'transactions/$transactionId',
       );
@@ -108,6 +139,16 @@ class TransactionRepository implements TransactionBaseRepository {
       return AppResult.success(transaction);
     } catch (err) {
       return AppResult.failure(err.toString());
+    }
+  }
+
+  Future<CardModel?> getCardById(String id) async {
+    List<CardModel> listCards = await SharedPrefsStorage.getCachedCardModels();
+    try {
+      return listCards.firstWhere((card) => card.uuid == id);
+    } catch (e) {
+      debugPrint("Error when get CardByID");
+      return CardModel.empty();
     }
   }
 }

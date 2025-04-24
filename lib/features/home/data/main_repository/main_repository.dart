@@ -64,7 +64,7 @@ class MainRepository implements MainBaseRepository {
 
     final transactions = await _getDataAndClearHive();
     final result = await _updateFirestoreAndGetData(transactions, limit);
-    loadAndCacheData();
+    //loadAndCacheData();
     // Chỉ thiết lập Timer nếu chưa khởi tạo hôm nay
     if (!isTimerInitialized) {
       final now = DateTime.now();
@@ -73,10 +73,8 @@ class MainRepository implements MainBaseRepository {
       // nếu chưa lưu hoặc khác ngày thì khởi tạo
       if (storedDate == null || !_isSameDay(now, storedDate)) {
         isTimerInitialized = true;
-
         // Lưu ngày hôm nay
         await SharedPrefsStorage.storeDateForTimer(now);
-
         // Tạo Timer định kỳ 4 giờ
         timer = Timer.periodic(const Duration(hours: 4), (timer) {
           debugPrint("🕰️ Timer đã được kích hoạt và đang chạy.");
@@ -88,7 +86,9 @@ class MainRepository implements MainBaseRepository {
         });
       }
     }
-
+    unawaited(addAllCategories());
+    unawaited(deleteDuplicateCategories());
+    loadAndCacheData();
     return AppResult.success(result);
   }
 
@@ -184,6 +184,118 @@ class MainRepository implements MainBaseRepository {
         dbHiveClient: _dbHiveClient,
       );
 
+      final categoriesToAdd = <Categorys>[];
+      final alreadyExistCategories = <Categorys>[];
+
+      for (final category in Categorys.values) {
+        final name = category.name.toLowerCase().trim();
+        if (existingNames.contains(name)) {
+          alreadyExistCategories.add(category);
+        } else {
+          categoriesToAdd.add(category);
+        }
+      }
+
+      if (alreadyExistCategories.isNotEmpty) {
+        debugPrint('📦 Các categories đã tồn tại:');
+        for (final category in alreadyExistCategories) {
+          debugPrint('   • ${category.name}');
+        }
+      }
+
+      if (categoriesToAdd.isEmpty) {
+        debugPrint('✅ Tất cả categories đã tồn tại trên Firestore.');
+        await prefs.setBool('has_added_categories', true);
+        return true;
+      }
+
+      debugPrint('🔄 Đang thêm ${categoriesToAdd.length} categories mới:');
+      for (final category in categoriesToAdd) {
+        debugPrint('   ➕ ${category.name}');
+      }
+
+      final emptyModel = CategoryModel.empty();
+
+      final results = await Future.wait(categoriesToAdd.map((category) {
+        return categoryRepository.addAllCategories(emptyModel, category);
+      }));
+
+      for (var i = 0; i < results.length; i++) {
+        results[i].when(
+          success: (_) =>
+              debugPrint('✅ Đã thêm category: ${categoriesToAdd[i].name}'),
+          failure: (error) => debugPrint(
+              '❌ Lỗi khi thêm category: ${categoriesToAdd[i].name}, Lỗi: $error'),
+        );
+      }
+
+      await prefs.setBool('has_added_categories', true);
+      return true;
+    } catch (e) {
+      debugPrint('❌ addAllCategories gặp lỗi: $e');
+      return false;
+    }
+  }
+
+  Future<void> deleteDuplicateCategories() async {
+    final categories = await _dbFirestoreClient.getQuery<CategoryModel>(
+      collectionPath: 'categories',
+      mapper: (data, documentId) =>
+          CategoryModel.fromJson(data!).copyWith(uuid: documentId!),
+    );
+
+    final Map<String, List<CategoryModel>> groupedByName = {};
+
+    for (final category in categories) {
+      final cleanedName = category.name.toLowerCase().trim();
+      groupedByName.putIfAbsent(cleanedName, () => []).add(category);
+    }
+
+    int totalDeleted = 0;
+
+    for (final entry in groupedByName.entries) {
+      final duplicates = entry.value;
+
+      if (duplicates.length > 1) {
+        final toDelete = duplicates.sublist(1);
+        final deletedNames = <String>[];
+
+        await Future.wait(toDelete.map((category) async {
+          await _categoryRepository.deleteCategory(category.uuid);
+          deletedNames.add("${category.name} (ID: ${category.uuid})");
+        }));
+
+        for (final name in deletedNames) {
+          debugPrint("🗑️ Đã xoá category trùng: $name");
+        }
+
+        totalDeleted += toDelete.length;
+      }
+    }
+
+    debugPrint("✅ Xoá trùng xong, tổng cộng đã xoá $totalDeleted categories.");
+  }
+
+/*
+  Future<bool> addAllCategories() async {
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      final existingCategories =
+          await _dbFirestoreClient.getQuery<CategoryModel>(
+        collectionPath: 'categories',
+        mapper: (data, documentId) => CategoryModel.fromJson(data!),
+      );
+
+      final existingNames = existingCategories
+          .map((cat) => cat.name.toLowerCase().trim())
+          .toSet();
+
+      final categoryRepository = CategoryRepository(
+        dbFirestoreClient: _dbFirestoreClient,
+        authUser: _authUser,
+        dbHiveClient: _dbHiveClient,
+      );
+
       final categoriesToAdd = Categorys.values.where((category) {
         final name = category.name.toLowerCase().trim();
         return !existingNames.contains(name);
@@ -214,6 +326,79 @@ class MainRepository implements MainBaseRepository {
       }
 
       // ✅ Đánh dấu đã thêm vào SharedPreferences
+      await prefs.setBool('has_added_categories', true);
+      return true;
+    } catch (e) {
+      debugPrint('❌ addAllCategories gặp lỗi: $e');
+      return false;
+    }
+  }
+*/
+/*  Future<bool> addAllCategories() async {
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      final existingCategories =
+          await _dbFirestoreClient.getQuery<CategoryModel>(
+        collectionPath: 'categories',
+        mapper: (data, documentId) => CategoryModel.fromJson(data!),
+      );
+
+      final existingNames = existingCategories
+          .map((cat) => cat.name.toLowerCase().trim())
+          .toSet();
+
+      final categoryRepository = CategoryRepository(
+        dbFirestoreClient: _dbFirestoreClient,
+        authUser: _authUser,
+        dbHiveClient: _dbHiveClient,
+      );
+
+      final categoriesToAdd = <Categorys>[];
+      final alreadyExistCategories = <Categorys>[];
+
+      for (final category in Categorys.values) {
+        final name = category.name.toLowerCase().trim();
+        if (existingNames.contains(name)) {
+          alreadyExistCategories.add(category);
+        } else {
+          categoriesToAdd.add(category);
+        }
+      }
+
+      if (alreadyExistCategories.isNotEmpty) {
+        debugPrint('📦 Các categories đã tồn tại:');
+        for (final category in alreadyExistCategories) {
+          debugPrint('   • ${category.name}');
+        }
+      }
+
+      if (categoriesToAdd.isEmpty) {
+        debugPrint('✅ Tất cả categories đã tồn tại trên Firestore.');
+        await prefs.setBool('has_added_categories', true);
+        return true;
+      }
+
+      debugPrint('🔄 Đang thêm ${categoriesToAdd.length} categories mới:');
+      for (final category in categoriesToAdd) {
+        debugPrint('   ➕ ${category.name}');
+      }
+
+      final results = await Future.wait(categoriesToAdd.map((category) {
+        return categoryRepository.addAllCategories(
+          CategoryModel.empty(),
+          category,
+        );
+      }));
+
+      for (var i = 0; i < results.length; i++) {
+        results[i].when(
+          success: (_) =>
+              debugPrint('✅ Đã thêm category: ${categoriesToAdd[i].name}'),
+          failure: (error) => debugPrint(
+              '❌ Lỗi khi thêm category: ${categoriesToAdd[i].name}, Lỗi: $error'),
+        );
+      }
+
       await prefs.setBool('has_added_categories', true);
       return true;
     } catch (e) {
@@ -255,7 +440,7 @@ class MainRepository implements MainBaseRepository {
       }
     }
     debugPrint("✅ Xoá trùng xong, tổng cộng đã xoá $totalDeleted categories.");
-  }
+  }*/
 
   Future<List<CategoryModel>> getCategoriesFromFireStore() async {
     try {

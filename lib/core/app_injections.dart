@@ -35,7 +35,6 @@ import 'models/transactions/transaction_hive_model.dart';
 import 'service/network_info.dart';
 
 final getIt = GetIt.I;
-late Timer _timer;
 
 Future<void> initAppConfig() async {
   // Initialize [FirebaseApp].

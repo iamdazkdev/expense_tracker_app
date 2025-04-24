@@ -61,7 +61,7 @@ class _CategoryViewState extends State<CategoryView> {
               );
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return Center(
-                child: Text('No categories available'),
+                child: Text('Chưa có danh mục nào'),
               );
             } else {
               List<CategoryModel> categories = snapshot.data!;

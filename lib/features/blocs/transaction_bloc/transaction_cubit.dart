@@ -270,9 +270,8 @@ class TransactionCubit extends Cubit<TransactionState> {
 
   Future<void> deleteTransaction(String transactionId) async {
     emit(const TransactionState.loading());
-
     try {
-      Transaction? transaction = await _dbFirestoreClientBase.getDocument(
+      /*Transaction? transaction = await _dbFirestoreClientBase.getDocument(
           documentId: transactionId,
           collectionPath: "transactions",
           objectMapper: (data, id) =>
@@ -297,10 +296,9 @@ class TransactionCubit extends Cubit<TransactionState> {
           expense: (updatedCard.expense ?? 0) - transaction.amount,
         );
       }
-      await _cardRepository.updateCard(updatedCard);
+      await _cardRepository.updateCard(updatedCard);*/
       // Xoá transaction
       await _transactionRepository.deleteTransaction(transactionId);
-
       emit(const TransactionState.success('Giao dịch đã xóa thành công'));
     } catch (error) {
       debugPrint('error: $error');

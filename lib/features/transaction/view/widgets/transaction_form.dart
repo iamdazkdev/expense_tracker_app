@@ -221,9 +221,9 @@ class _TransactionFormState extends State<TransactionForm> {
       child: Expanded(
         child: ListView.builder(
           scrollDirection: Axis.vertical,
-          itemCount: listCategories.length,
+          itemCount: categorys.length,
           itemBuilder: (context, index) {
-            CategoryModel category = listCategories[index];
+            final category = categorys[index];
             final matchedEnum = getCategoryByName(category.name);
 
             return Padding(
@@ -239,7 +239,8 @@ class _TransactionFormState extends State<TransactionForm> {
                   vertical: 10,
                 ),
                 onPressed: () {
-                  context.read<TransactionCubit>().onCategoryChanged(category);
+                  // context.read<TransactionCubit>().onCategoryChanged(category);
+                  context.read<TransactionCubit>().onCategorysChanged(category);
                   context.pop();
                 },
               ),
