@@ -71,12 +71,6 @@ class AppRouter {
           routeName: settings.name,
           viewToShow: const CardView(),
         );
-      /*  case RoutesName.statisticals:
-        return _getPageRoute(
-          routeName: settings.name,
-          viewToShow: StatisticalView(),
-        );*/
-
       default:
         return _getPageRoute(
           routeName: settings.name,

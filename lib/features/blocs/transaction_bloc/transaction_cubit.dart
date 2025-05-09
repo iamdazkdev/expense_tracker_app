@@ -271,32 +271,6 @@ class TransactionCubit extends Cubit<TransactionState> {
   Future<void> deleteTransaction(String transactionId) async {
     emit(const TransactionState.loading());
     try {
-      /*Transaction? transaction = await _dbFirestoreClientBase.getDocument(
-          documentId: transactionId,
-          collectionPath: "transactions",
-          objectMapper: (data, id) =>
-              Transaction.fromMap(data!, transactionId));
-      if (transaction == null) {
-        emit(const TransactionState.error('Không tìm thấy giao dịch'));
-        return;
-      }
-      final card = getCardById(transaction.cardID);
-      if (card == null) {
-        emit(const TransactionState.error('Không tìm thấy thẻ'));
-        return;
-      }
-
-      CardModel updatedCard = card;
-      if (transaction.category == TransactionType.income) {
-        updatedCard = updatedCard.copyWith(
-          income: (updatedCard.income ?? 0) - transaction.amount,
-        );
-      } else {
-        updatedCard = updatedCard.copyWith(
-          expense: (updatedCard.expense ?? 0) - transaction.amount,
-        );
-      }
-      await _cardRepository.updateCard(updatedCard);*/
       // Xoá transaction
       await _transactionRepository.deleteTransaction(transactionId);
       emit(const TransactionState.success('Giao dịch đã xóa thành công'));
