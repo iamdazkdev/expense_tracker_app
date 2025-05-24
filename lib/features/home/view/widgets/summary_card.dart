@@ -9,6 +9,7 @@ import '../../../../core/models/transactions/transaction_model.dart';
 import '../../../../core/styles/app_text_style.dart';
 import '../../../blocs/state_bloc/state_cubit.dart';
 import '../../../statisticals/data/stat_comparison_utils.dart';
+import '../../../statisticals/data/statistical_utils.dart';
 import '../../../statisticals/view/statisticals_view.dart';
 import 'widgets.dart';
 
@@ -122,7 +123,9 @@ class _SummaryCardState extends State<SummaryCard> {
                       generateComparisonData(transactions, now, 'month');
                   final yearlyData =
                       generateComparisonData(transactions, now, 'year');
-
+                  final weeklyCategoryBreakdown =
+                      StatisticalUtils.generateCategorySummaryByName(
+                          transactions);
                   setState(() {
                     Navigator.push(
                       context,
