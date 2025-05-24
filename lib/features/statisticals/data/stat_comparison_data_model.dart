@@ -10,6 +10,7 @@ class StatComparisonData {
   final Map<String, double> categoryBreakdownLast;
   final Map<String, double> categoryBreakdownThis;
 
+  final Map<String, double> result;
   StatComparisonData({
     required this.totalIncomeLast,
     required this.totalExpenseLast,
@@ -19,5 +20,6 @@ class StatComparisonData {
     required this.avgTransactionThis,
     required this.categoryBreakdownLast,
     required this.categoryBreakdownThis,
+    required this.result,
   });
 }

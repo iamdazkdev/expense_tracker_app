@@ -1,8 +1,9 @@
 import 'package:daily_expense_tracker_app/core/extension/extension.dart';
+import 'package:daily_expense_tracker_app/features/statisticals/view/widgets/dynamic_pie_chart.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
+import '../../../core/enum/categorys.dart';
 import '../data/stat_comparison_data_model.dart';
 
 class StatisticalView extends StatefulWidget {
@@ -10,11 +11,18 @@ class StatisticalView extends StatefulWidget {
   final StatComparisonData monthlyData;
   final StatComparisonData yearlyData;
 
+/*  final Map<String, double> weeklyCategoryBreakdown;
+  final Map<String, double> monthlyCategoryBreakdown;
+  final Map<String, double> yearlyCategoryBreakdown;*/
+
   const StatisticalView({
     super.key,
     required this.weeklyData,
     required this.monthlyData,
     required this.yearlyData,
+    /*required this.weeklyCategoryBreakdown,
+    required this.monthlyCategoryBreakdown,
+    required this.yearlyCategoryBreakdown,*/
   });
 
   @override
@@ -29,6 +37,16 @@ class _StatisticalViewState extends State<StatisticalView>
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
     super.initState();
+  }
+
+  List<Color> getColorsFromTitles(List<String> titles) {
+    return titles.map((title) {
+      final category = categorys.firstWhere(
+        (cat) => cat.name == title,
+        orElse: () => Categorys.others, // nếu không tìm thấy thì dùng 'others'
+      );
+      return category.backgroundColorIcon;
+    }).toList();
   }
 
   @override
@@ -246,122 +264,9 @@ class _StatisticalViewState extends State<StatisticalView>
     );
   }
 
-/*  Widget _buildIncomeExpenseBar(StatComparisonData data) {
-    final spots = <BarChartGroupData>[
-      BarChartGroupData(x: 0, barRods: [
-        BarChartRodData(toY: data.totalIncomeLast, color: Colors.blue),
-        BarChartRodData(toY: data.totalIncomeThis, color: Colors.blue.shade200),
-      ]),
-      BarChartGroupData(x: 1, barRods: [
-        BarChartRodData(toY: data.totalExpenseLast, color: Colors.red),
-        BarChartRodData(toY: data.totalExpenseThis, color: Colors.red.shade200),
-      ]),
-    ];
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: BarChart(
-        BarChartData(
-          alignment: BarChartAlignment.spaceAround,
-          groupsSpace: 40,
-          barGroups: spots,
-          titlesData: FlTitlesData(
-            leftTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: false,
-                reservedSize: 40,
-              ),
-            ),
-            rightTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                getTitlesWidget: (value, meta) {
-                  return Text(
-                    '${value ~/ 1000000}M', // tuỳ theo đơn vị bạn đang dùng
-                    style: const TextStyle(
-                      fontSize: 10, // 👈 giảm size tại đây
-                      color: Colors.grey, // hoặc màu bạn muốn
-                    ),
-                    textAlign: TextAlign.left,
-                  );
-                },
-                reservedSize: 30, // 👈 giảm kích thước chiếm không gian nếu cần
-              ),
-            ),
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                getTitlesWidget: (value, meta) {
-                  if (value == 0) return const Text('Thu nhập');
-                  if (value == 1) return const Text('Chi tiêu');
-                  return const Text('');
-                },
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAvgTransactionBar(StatComparisonData data) {
-    final spots = <BarChartGroupData>[
-      BarChartGroupData(x: 0, barRods: [
-        BarChartRodData(toY: data.avgTransactionLast, color: Colors.green),
-        BarChartRodData(
-          toY: data.avgTransactionThis,
-          color: Colors.green.shade200,
-        ),
-      ]),
-    ];
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: BarChart(
-        BarChartData(
-          alignment: BarChartAlignment.center,
-          groupsSpace: 40,
-          barGroups: spots,
-          titlesData: FlTitlesData(
-            leftTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: false,
-                reservedSize: 40,
-              ),
-            ),
-            rightTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                getTitlesWidget: (value, meta) {
-                  return Text(
-                    '${value ~/ 1000000}M',
-                    style: const TextStyle(
-                      fontSize: 10,
-                      color: Colors.grey,
-                    ),
-                    textAlign: TextAlign.left,
-                  );
-                },
-                reservedSize: 30,
-              ),
-            ),
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                getTitlesWidget: (value, meta) {
-                  if (value == 0) return const Text('Giá trị TB');
-                  return const Text('');
-                },
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }*/
-
-  Widget _buildPieChart(StatComparisonData data) {
+/*  Widget _buildPieChart(StatComparisonData data) {
     final sections = <PieChartSectionData>[];
+    debugPrint("SECTIONS LENGTH: ${sections.length}");
     data.categoryBreakdownThis.forEach((key, value) {
       sections.add(
         PieChartSectionData(
@@ -377,6 +282,83 @@ class _StatisticalViewState extends State<StatisticalView>
         sections: sections,
         sectionsSpace: 2,
         centerSpaceRadius: 30,
+      ),
+    );
+  }*/
+/*  Widget _buildPieChart(StatComparisonData data) {
+    final sections = <PieChartSectionData>[];
+
+    data.categoryBreakdownThis.forEach((key, value) {
+      final categoryEnum = Categorys.values.firstWhere(
+        (e) => e.name == key,
+        orElse: () => Categorys.food,
+      );
+      sections.add(
+        PieChartSectionData(
+          value: value,
+          title: value.toInt().toStringAsFixed(2),
+          color: categoryEnum.backgroundColorIcon,
+          radius: 50,
+          titleStyle: const TextStyle(
+              fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+      );
+    });
+
+    return Center(
+      child: DynamicPieChart(
+        titles: ['Ăn uống', 'Di chuyển', 'Mua sắm', 'Giải trí'],
+        values: [400000, 250000, 150000, 200000],
+        colors: [
+          PieCharColors.contentColorBlue,
+          PieCharColors.contentColorYellow,
+          PieCharColors.contentColorPurple,
+          PieCharColors.contentColorGreen,
+        ],
+      ),
+    );
+  }*/
+/*  Widget _buildPieChart(StatComparisonData data) {
+    // Lấy danh sách danh mục và giá trị
+    final titles = <String>[];
+    final values = <double>[];
+    final colors = <Color>[];
+
+    data.result.forEach((key, value) {
+      titles.add(key);
+      values.add(value);
+
+      final categoryEnum = Categorys.values.firstWhere(
+        (e) => e.name == key,
+        orElse: () => Categorys.food,
+      );
+      colors.add(categoryEnum.backgroundCoslorIcon);
+    });
+
+    return Center(
+      child: DynamicPieChart(
+        titles: titles,
+        values: values,
+        colors: colors,
+      ),
+    );
+  }*/
+  Widget _buildPieChart(StatComparisonData data) {
+    final titles = data.result.keys.toList();
+    final values = data.result.values.toList();
+
+    final colors = getColorsFromTitles(titles);
+
+    // In ra debug
+    for (int i = 0; i < titles.length; i++) {
+      debugPrint('Title: ${titles[i]}, Value: ${values[i]}');
+    }
+
+    return Center(
+      child: DynamicPieChart(
+        titles: titles,
+        values: values,
+        colors: colors,
       ),
     );
   }

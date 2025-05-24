@@ -78,6 +78,10 @@ StatComparisonData generateComparisonData(
   final avgThis = thisPeriod.isNotEmpty ? totalThis / thisPeriod.length : 0;
   final avgLast = lastPeriod.isNotEmpty ? totalLast / lastPeriod.length : 0;
 
+  final Map<String, double> result = {};
+  for (final t in allTransactions) {
+    result[t.categoryName] = (result[t.categoryName] ?? 0) + t.amount;
+  }
   return StatComparisonData(
     totalIncomeLast: incomeLast,
     totalExpenseLast: expenseLast,
@@ -87,5 +91,6 @@ StatComparisonData generateComparisonData(
     avgTransactionThis: double.tryParse(avgThis.toString()) ?? 0.0,
     categoryBreakdownLast: categoryLast,
     categoryBreakdownThis: categoryThis,
+    result: result,
   );
 }
