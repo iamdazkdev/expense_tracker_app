@@ -19,7 +19,7 @@ Manage your expenses effortlessly with this intuitive app.📱Track daily spendi
 - Security: 🔒 Ensure the security of your financial data with robust encryption and privacy measures.
 
 ## 📦 Package Structure 
-    DAILY_EXPENSE_TRACKER_APP
+    EXPENSE_TRACKER_APP
     ├── assets/
     │   ├── icons/
     │   ├── images/
